@@ -1,0 +1,15 @@
+gui:
+    to be made
+
+speech recognition:
+    to be made
+
+cameramouse:
+    smoothen the mouse movement
+    stabilize the mouse cursor for better click precision
+    make it so that only one person will access or will be recognized by the camera mouse
+
+
+"if possible" improvements/ideas:
+    make it so a certain user will only access the application
+    add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users.
