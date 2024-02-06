@@ -9,6 +9,10 @@ cameramouse:
     stabilize the mouse cursor for better click precision
     make it so that only one person will access or will be recognized by the camera mouse
 
+    to try:
+        make the webcam zoom in
+        if a certain distance is met, that is the time you can move the mouse. The distance will be based on the size of the face (height, width)
+
 
 "if possible" improvements/ideas:
     make it so a certain user will only access the application
