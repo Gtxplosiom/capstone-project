@@ -18,3 +18,4 @@ cameramouse:
     make it so a certain user will only access the application
     add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users.
     automatic "click" when you say certain words that is in the screen
+    voice typing letter-by-letter
