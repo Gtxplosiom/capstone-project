@@ -30,6 +30,11 @@ def camera_mouse():
 
             landmarks = predictor(gray, face)
 
+            x1 = face.left()
+            y1 = face.top()
+            x2 = face.right()
+            y2 = face.bottom()
+
             xx = landmarks.part(30).x
             yy = landmarks.part(30).y
 
@@ -49,6 +54,7 @@ def camera_mouse():
 
             screen.moveTo(follow_x*sensitivity_x-current_x, follow_y*sensitivity_y-current_y, duration=0.1)
             
+            cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0,255,0), 3)
             cv2.circle(flipped_frame, (xx, yy), 3, (255, 0, 0), -1)
 
         cv2.imshow('Frame', flipped_frame)

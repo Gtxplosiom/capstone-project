@@ -1,3 +1,3 @@
-import cameramouse
+import cameraMouse
 
-cameramouse.camera_mouse()
+cameraMouse.camera_mouse()

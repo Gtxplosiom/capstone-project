@@ -24,10 +24,10 @@ while True:
 
     faces = detector(gray)
     for face in faces:
-        #x1 = face.left() #x1, y1, x2 and y2 is in order to specify the coordinates from detector output which looks like this: [(left, top) (right, bottom)]
-        #y1 = face.top()
-        #x2 = face.right()
-        #y2 = face.bottom()
+        x1 = face.left() #x1, y1, x2 and y2 is in order to specify the coordinates from detector output which looks like this: [(left, top) (right, bottom)]
+        y1 = face.top()
+        x2 = face.right()
+        y2 = face.bottom()
 
         ##cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0,255,0), 3) #drawing of rectangle using cv2 syntax: cv2.rectangle(target_frame, (x1, y1), (x2, y2), (color_code), thickness)
 
