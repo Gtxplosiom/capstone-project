@@ -1,3 +1,24 @@
+import threading
 import cameraMouse
+import UI
+import keyboard, os
 
-cameraMouse.camera_mouse()
+def task1():
+    UI.startUI()
+
+def task2():
+    cameraMouse.camera_mouse()
+
+# Create processes
+thread1 = threading.Thread(target=task1)
+thread2 = threading.Thread(target=task2)
+
+# Start processes
+thread1.start()
+thread2.start()
+
+keyboard.add_hotkey('esc', lambda: os._exit(1))
+
+# Wait for processes to finish
+# thread1.join()
+# thread2.join()
