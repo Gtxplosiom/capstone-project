@@ -10,14 +10,6 @@ def startUI():
 
     root.geometry("960x540")
 
-    def destroy_all_widgets():
-        for widgets in mainRoot.winfo_children():
-            widgets.destroy()
-
-    def backConfigure():
-        configWindow.withdraw()
-        mainRoot.deiconify()
-
     def MaintoConf():
         mainRoot.withdraw()
         configWindow.deiconify()
@@ -66,13 +58,13 @@ def startUI():
     label = tk.Label(root, font=('Arial', 20))
     label.pack()
 
-    # mainUI Widgets
+    # mainRoot Widgets
     labelAsk = tk.Label(mainRoot, text="What do you want to do?", font=('Arial', 20))
     labelInstruct = tk.Label(mainRoot, text="Say what you want to do, or click manually", font=('Arial', 20))
     configButton = tk.Button(mainRoot, text="Configure", font=('Arial', 15), command=MaintoConf)
     exitButton = tk.Button(mainRoot, text="Exit", font=('Arial', 15), command=quit)
 
-    # config Widgets
+    # configWindow Widgets
     calibrateButton = tk.Button(configWindow, text="Calibrate", font=('Arial', 15))
     backConfig = tk.Button(configWindow, text="Back", font=('Arial', 15), command=ConftoMain)
 
