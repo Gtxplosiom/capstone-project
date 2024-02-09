@@ -2,6 +2,8 @@ from vosk import Model, KaldiRecognizer
 
 import pyaudio
 
+import clickOnScreen
+
 model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
 recognizer = KaldiRecognizer(model, 16000)
 
@@ -11,9 +13,11 @@ stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True,fra
 stream.start_stream()
 
 while True:
-    data = stream.read(4096)
+    data = stream.read(4096, exception_on_overflow=False)
 
     if recognizer.AcceptWaveform(data):
         text = recognizer.Result()
-        print(text)
+        trimmedText = text[14:-3]
+        print(trimmedText.capitalize())
+        clickOnScreen.find_coordinates_text(trimmedText.capitalize())
         
