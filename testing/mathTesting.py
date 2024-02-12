@@ -1,6 +1,5 @@
 import math
 
-
 ## CALCULATE THE DISTANCE BETWEEN TWO PIXELS IN 2-DIMENSION
 
 def calculate_pixel_distance(pixel_width1, pixel_height1, pixel_width2, pixel_height2):

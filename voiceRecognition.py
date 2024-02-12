@@ -2,7 +2,12 @@ from vosk import Model, KaldiRecognizer
 
 import pyaudio
 
+import threading
+
 import clickOnScreen
+import cameraMouse
+
+activateMouse = True
 
 def voiceRecog():
     model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
@@ -26,8 +31,16 @@ def voiceRecog():
 
             keyword = splitText[0].capitalize()
             print(keyword)
+            print(trimmedText)
 
-            # if trimmedText = "open camera mouse":
+            if trimmedText == "open mouse":
+                global activateMouse
+                activateMouse = True
+
+                thread1 = threading.Thread(target=cameraMouse.camera_mouse)
+                thread1.start()
+            elif trimmedText == "close mouse":
+                activateMouse = False
 
             # commands
             if keyword == "Click":

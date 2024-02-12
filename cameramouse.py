@@ -1,8 +1,11 @@
 import cv2
 import dlib
 import pyautogui as screen
+import voiceRecognition
 
 screen.FAILSAFE = False
+
+activate = True
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("models/shape_predictor_68_face_landmarks.dat")
@@ -26,6 +29,8 @@ def camera_mouse():
         gray = cv2.cvtColor(flipped_frame, cv2.COLOR_BGR2GRAY)
 
         faces = detector(gray)
+
+        print(activate)
         for face in faces:
 
             landmarks = predictor(gray, face)
@@ -60,5 +65,5 @@ def camera_mouse():
         cv2.imshow('Frame', flipped_frame)
 
         key = cv2.waitKey(1)
-        if key == 27:
+        if voiceRecognition.activateMouse == False:
             break

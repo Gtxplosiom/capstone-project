@@ -1,11 +1,13 @@
 system:
     make it so functions like cameraMouse and clickOnScreen can be activated and turned off
+    figure out to pause and resume threads
 
 gui:
     to be made
 
 speech recognition:
-    to be made
+    make it responsive
+    make it so that you do not need to enunciate words precisely to be understood
 
 cameramouse:
     smoothen the mouse movement
