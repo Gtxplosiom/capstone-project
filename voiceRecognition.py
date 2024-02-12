@@ -46,9 +46,12 @@ def voiceRecog():
 
             # commands
             if keyword == "Click":
-                command = splitText[1].capitalize()
-                print(command)
-                clickOnScreen.click(command)
+                if len(splitText) > 1:
+                    command = splitText[1].capitalize()
+                    print(command)
+                    clickOnScreen.click(command)
+                else:
+                    clickOnScreen.pyautogui.click()
             elif keyword == "Double" and splitText[1].capitalize() == "Click":
                 command = splitText[2].capitalize()
                 print(command)

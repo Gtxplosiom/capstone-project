@@ -1,6 +1,6 @@
 system:
-    make it so functions like cameraMouse and clickOnScreen can be activated and turned off
-    figure out to pause and resume threads
+    make it so functions like cameraMouse and clickOnScreen can be activated and turned off - check
+    figure out to pause and resume threads - check
 
 gui:
     to be made
