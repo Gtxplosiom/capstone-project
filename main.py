@@ -1,13 +1,14 @@
 import threading
-import cameraMouse
 import UI
+import voiceRecognition
+import cameraMouse
 import keyboard, os
 
 def task1():
     UI.startUI()
 
 def task2():
-    cameraMouse.camera_mouse()
+    voiceRecognition.voiceRecog()
 
 # Create processes
 thread1 = threading.Thread(target=task1)

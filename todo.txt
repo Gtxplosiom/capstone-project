@@ -1,3 +1,6 @@
+system:
+    make it so functions like cameraMouse and clickOnScreen can be activated and turned off
+
 gui:
     to be made
 
