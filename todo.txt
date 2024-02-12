@@ -13,6 +13,10 @@ cameramouse:
     to try:
         if a certain distance is met, that is the time you can move the mouse. The distance will be based on the size of the face (height, width)
 
+OCR:
+    make it identify icons
+    make it identify capitalized letters from small letters and vice versa
+
 
 "if possible" improvements/ideas:
     make it so a certain user will only access the application
