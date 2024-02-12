@@ -18,6 +18,7 @@ thread2 = threading.Thread(target=task2)
 thread1.start()
 thread2.start()
 
+# End Application
 keyboard.add_hotkey('esc', lambda: os._exit(1))
 
 # Wait for processes to finish
