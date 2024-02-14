@@ -9,8 +9,9 @@ speech recognition:
     make it responsive
     make it so that you do not need to enunciate words precisely to be understood
     add a cancel command so that the highlight frame would close
+    improve speech recognition (Kaldi)
 
-cameramouse:
+camera mouse:
     smoothen the mouse movement
     to try:
         make the webcam zoom in
@@ -18,6 +19,9 @@ cameramouse:
     make it so that only one person will access or will be recognized by the camera mouse
     to try:
         if a certain distance is met, that is the time you can move the mouse. The distance will be based on the size of the face (height, width)
+
+voice typing:
+    make it possible to type letter by letter
 
 OCR:
     make it identify icons
