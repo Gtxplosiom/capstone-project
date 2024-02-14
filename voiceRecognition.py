@@ -56,6 +56,15 @@ def voiceRecog():
                 command = splitText[2].capitalize()
                 print(command)
                 clickOnScreen.doubleClick(command)
+            elif keyword == "Look":
+                if len(splitText) > 1:
+                    command = splitText[1].capitalize()
+                    print(command)
+                    clickOnScreen.highlightTk(command)
+                else:
+                    print("What to find?")
+            elif keyword == "Cancel":
+                print("Cancelled")
             elif keyword == "Hover":
                 command = splitText[1].capitalize()
                 print(command)

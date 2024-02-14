@@ -8,6 +8,7 @@ gui:
 speech recognition:
     make it responsive
     make it so that you do not need to enunciate words precisely to be understood
+    add a cancel command so that the highlight frame would close
 
 cameramouse:
     smoothen the mouse movement
@@ -21,10 +22,13 @@ cameramouse:
 OCR:
     make it identify icons
     make it identify capitalized letters from small letters and vice versa
-
+    enumerate items - check
+    make it possible to choose between multiple items
+        make this as a feature if there are multiple similar words are found, if not, then proceed to the desired action, e.g. Click, DoubleClick, etc...
+    make the highlighting cancellable (5 second timer is applied for test purposes)
 
 "if possible" improvements/ideas:
     make it so a certain user will only access the application
-    add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users.
+    add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users (for statistics purposes)
     automatic "click" when you say certain words that is in the screen
     voice typing letter-by-letter

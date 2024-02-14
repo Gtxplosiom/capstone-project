@@ -52,6 +52,12 @@ def startUI():
 
             root.after(1000, countdown, time-1)
 
+    def hideHighlight():
+        highlight.withdraw()
+
+    def showHighlight():
+        highlight.deiconify()
+
     # root Widgets
     labelWelcome = tk.Label(root, text="Starting...", font=('Arial', 20))
     labelWelcome.pack(padx=20, pady=225)
@@ -68,6 +74,15 @@ def startUI():
     calibrateButton = tk.Button(configWindow, text="Calibrate", font=('Arial', 15))
     backConfig = tk.Button(configWindow, text="Back", font=('Arial', 15), command=ConftoMain)
 
+    # clickOnScreen highlighter widgets
+    highlight = tk.Tk()
+    highlight.attributes('-alpha', 0.5)
+    highlight.attributes('-fullscreen', True)
+    canvasHighlight = tk.Canvas(highlight, bg='black')
+    canvasHighlight.pack(fill='both', expand=True)
+
     countdown(5)
+
+    hideHighlight()
 
     root.mainloop()
