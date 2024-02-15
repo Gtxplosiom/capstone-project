@@ -16,8 +16,6 @@ def voiceRecog():
     model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
     recognizer = KaldiRecognizer(model, 16000)
 
-    file_path = 'commands.txt'
-
     mic = pyaudio.PyAudio()
 
     stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True,frames_per_buffer=8192)
@@ -106,5 +104,3 @@ def voiceRecog():
                                 print(result)
                                 clickOnScreen.pyautogui.typewrite(result)
                                 transcribedText.clear()
-                            
-
