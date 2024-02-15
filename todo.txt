@@ -22,7 +22,8 @@ camera mouse:
         if a certain distance is met, that is the time you can move the mouse. The distance will be based on the size of the face (height, width)
 
 voice typing:
-    make it possible to type letter by letter
+    make it possible to type letter by letter - check
+        refine it
 
 OCR:
     make it identify icons
