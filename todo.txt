@@ -4,6 +4,7 @@ system:
 
 gui:
     to be made
+    make it a taskbar application
 
 speech recognition:
     make it responsive
