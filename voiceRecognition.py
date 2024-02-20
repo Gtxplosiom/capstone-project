@@ -7,6 +7,7 @@ import time
 
 import clickOnScreen
 import cameraMouse
+import FocusApp
 
 activateMouse = True
 
@@ -23,10 +24,14 @@ def voiceRecog():
 
     while True:
         data = stream.read(4096, exception_on_overflow=False)
+        notepad_window = FocusApp.gw.getWindowsWithTitle('Notepad') # test
+        active_window = str(FocusApp.gw.getActiveWindow())
 
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
             trimmedText = text[14:-3]
+            
+            print("running")
 
             splitText = trimmedText.split(" ")
 
@@ -72,6 +77,13 @@ def voiceRecog():
                 clickOnScreen.hover(command)
             elif keyword == "Type":
                 voiceType()
+
+            # Active window
+            elif 'Notepad' in active_window: # test (can be moved to another file)
+                FocusApp.Notepad()
+            elif 'Word' in active_window: # test (can be moved to another file)
+                FocusApp.Word()
+
             else:
                 print("Waiting for a command")
 

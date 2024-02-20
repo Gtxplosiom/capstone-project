@@ -63,6 +63,8 @@ def startUI():
     labelWelcome.pack(padx=20, pady=225)
     label = tk.Label(root, font=('Arial', 20))
     label.pack()
+    label2 = tk.Label(root, font=('Arial', 20))
+    label2.pack()
 
     # mainRoot Widgets
     labelAsk = tk.Label(mainRoot, text="What do you want to do?", font=('Arial', 20))
