@@ -42,3 +42,5 @@ OCR:
     add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users (for statistics purposes)
     automatic "click" when you say certain words that is in the screen
     voice typing letter-by-letter
+
+list the used modules and libraries
