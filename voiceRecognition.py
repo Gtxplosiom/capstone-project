@@ -13,6 +13,21 @@ activateMouse = True
 
 pause = threading.Event()
 
+def trim_string(input_string, keywords):
+    words = input_string.split()
+
+    for keyword in keywords:
+        try:
+            index_of_keyword = words.index(keyword)
+            trimmed_string = ' '.join(words[index_of_keyword:])
+            return trimmed_string
+        except ValueError:
+            continue  # Try the next keyword if the current one is not found
+
+    # None of the keywords were found in the string
+    return input_string
+
+
 def voiceRecog():
     model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
     recognizer = KaldiRecognizer(model, 16000)
@@ -21,6 +36,9 @@ def voiceRecog():
 
     stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True,frames_per_buffer=8192)
     stream.start_stream()
+
+    # keywords for command
+    keywords = ["click", "double", "look"]
 
     while True:
         data = stream.read(4096, exception_on_overflow=False)
@@ -33,38 +51,44 @@ def voiceRecog():
             
             print("running")
 
-            splitText = trimmedText.split(" ")
+            # splitText = trimmedText.split(" ")
 
-            keyword = splitText[0].capitalize()
-            print(keyword)
-            print(trimmedText)
+            # keyword = splitText[0].capitalize()
 
-            if trimmedText == "open mouse":
+            result = trim_string(trimmedText, keywords)
+
+            splitResult = result.split(" ")
+
+            keyword = splitResult[0].capitalize()
+
+            print(result)
+
+            if result == "open mouse":
                 global activateMouse
                 activateMouse = True
                 thread1 = threading.Thread(target=cameraMouse.camera_mouse)
                 thread1.start()
-            elif trimmedText == "close mouse":
+            elif result == "close mouse":
                 activateMouse = False
 
             # commands
             if keyword == "Click":
-                if len(splitText) > 1:
-                    command = splitText[1].capitalize()
+                if len(result) > 1:
+                    command = splitResult[1].capitalize()
                     print(command)
                     clickOnScreen.click(command)
                 else:
                     clickOnScreen.pyautogui.click()
-            elif keyword == "Double" and splitText[1].capitalize() == "Click":
-                if len(splitText) > 1:
-                    command = splitText[2].capitalize()
+            elif keyword == "Double" and splitResult[1].capitalize() == "Click":
+                if len(splitResult) > 1:
+                    command = splitResult[2].capitalize()
                     print(command)
                     clickOnScreen.doubleClick(command)
                 else:
                     clickOnScreen.pyautogui.doubleClick()
             elif keyword == "Look":
-                if len(splitText) > 1:
-                    command = splitText[1].capitalize()
+                if len(splitResult) > 1:
+                    command = splitResult[1].capitalize()
                     print(command)
                     clickOnScreen.highlightTk(command)
                 else:
@@ -72,7 +96,7 @@ def voiceRecog():
             elif keyword == "Cancel":
                 print("Cancelled")
             elif keyword == "Hover":
-                command = splitText[1].capitalize()
+                command = splitResult[1].capitalize()
                 print(command)
                 clickOnScreen.hover(command)
             elif keyword == "Type":
@@ -83,6 +107,8 @@ def voiceRecog():
                 FocusApp.Notepad()
             elif 'Word' in active_window: # test (can be moved to another file)
                 FocusApp.Word()
+            elif 'Chrome' in active_window: # test (can be moved to another file)
+                FocusApp.Chrome()
 
             else:
                 print("Waiting for a command")

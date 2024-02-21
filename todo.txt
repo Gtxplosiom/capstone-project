@@ -1,9 +1,11 @@
 system:
     make it so functions like cameraMouse and clickOnScreen can be activated and turned off - check
     figure out to pause and resume threads - check
+    create one-time tutorial panels containing what commands are available in word, chrome or other applications and as well as how to use the command
 
 gui:
     to be made
+    create a help panel listing all guides and tutorials
     make it a taskbar application
 
 speech recognition:
@@ -14,6 +16,7 @@ speech recognition:
 
 camera mouse:
     smoothen the mouse movement
+    make it so this is "callable" everytime
     to try:
         make the webcam zoom in
     stabilize the mouse cursor for better click precision
@@ -28,6 +31,11 @@ voice typing:
 Specific Application Commands and Functions:
     make it possible to check the focused or in-focus app/window (App that is currenty used) - check
     create the commands for each applications (e.g. Browser(Chrome), MS Apps, and etc)
+        Chrome
+        MS Apps
+            Word
+            Excel
+            PowerPoint
 
 OCR:
     make it identify icons

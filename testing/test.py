@@ -1,16 +1,11 @@
-import pygetwindow as gw
-import time
+from win11toast import notify
 
-def get_active_window_title():
-    return gw.getActiveWindow().title if gw.getActiveWindow() else None
+def show_notification(title, message):
+    notification = notify(title, message)
+    notification.show()
 
-previous_active_window = None
+if __name__ == "__main__":
+    notification_title = "Notification Title"
+    notification_message = "This is a sample notification message."
 
-while True:
-    current_active_window = get_active_window_title()
-
-    if current_active_window != previous_active_window:
-        print("Active Window:", current_active_window)
-        previous_active_window = current_active_window
-
-    time.sleep(1)
+    show_notification(notification_title, notification_message)

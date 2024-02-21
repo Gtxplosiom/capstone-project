@@ -45,31 +45,37 @@ def highlightTk(text, lang='eng'):
 
         numItems = len(item_instances)
 
-        root = tkinter.Tk()
-        root.attributes('-alpha', 0.5)
-        root.attributes('-fullscreen', True)
-
-        canvas = tkinter.Canvas(root, bg='black')
-        canvas.pack(fill='both', expand=True)
-
         print(numItems)
 
-        # Loop through each instance of the input text and draw a rectangle with a label
-        for idx, (index, row) in enumerate(item_instances.iterrows(), 1):
-            x1, y1 = row['left'], row['top']
-            width, height = row['width'], row['height']
-            x2, y2 = x1 + width, y1 + height
+        if numItems > 1:
 
-            canvas.create_rectangle(x1, y1, x2, y2, fill='blue')
+            root = tkinter.Tk()
+            root.attributes('-alpha', 0.5)
+            root.attributes('-fullscreen', True)
 
-            # Label the found item with a number above the rectangle
-            label_x = (x1 + x2) / 2
-            label_y = y1 - 10
-            canvas.create_text(label_x, label_y, text=str(idx), fill='white')
+            canvas = tkinter.Canvas(root, bg='black')
+            canvas.pack(fill='both', expand=True)
 
-        root.after(5000, root.destroy)
+            print(numItems)
 
-        root.mainloop()
+            # Loop through each instance of the input text and draw a rectangle with a label
+            for idx, (index, row) in enumerate(item_instances.iterrows(), 1):
+                x1, y1 = row['left'], row['top']
+                width, height = row['width'], row['height']
+                x2, y2 = x1 + width, y1 + height
+
+                canvas.create_rectangle(x1, y1, x2, y2, fill='blue')
+
+                # Label the found item with a number above the rectangle
+                label_x = (x1 + x2) / 2
+                label_y = y1 - 10
+                canvas.create_text(label_x, label_y, text=str(idx), fill='white')
+
+            root.after(5000, root.destroy)
+
+            root.mainloop()
+
+        pyautogui.moveTo(x, y)
 
     except IndexError:
         print("Text was not found")
@@ -140,3 +146,11 @@ def hover(text, lang='eng'):
     pyautogui.moveTo(x+5, y+5)
 
     return(x, y)
+
+def scroll(direction):
+    if direction == "up":
+        pyautogui.scroll(2000)
+    elif direction == "down":
+        pyautogui.scroll(-2000)
+    else:
+        pass
