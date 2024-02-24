@@ -2,6 +2,7 @@ import cv2
 import dlib
 import pyautogui as screen
 import voiceRecognition
+import focusApp
 import time
 
 screen.FAILSAFE = False
@@ -19,7 +20,7 @@ adjustment_y = 185 # increase if cursor is far up from the center
 
 screen.PAUSE=0
 
-def camera_mouse():
+def CameraMouse():
     cap = cv2.VideoCapture(0) # 0 is index for webcams
 
     while True:
@@ -31,7 +32,6 @@ def camera_mouse():
 
         faces = detector(gray)
 
-        print(activate)
         for face in faces:
 
             landmarks = predictor(gray, face)
@@ -66,7 +66,11 @@ def camera_mouse():
         cv2.imshow('Frame', flipped_frame)
 
         key = cv2.waitKey(1)
-        if voiceRecognition.activateMouse == False:
+        if voiceRecognition.activate_mouse == False:
+            cap.release()
+            cv2.destroyAllWindows()
+            break
+        elif focusApp.activate_mouse == False:
             cap.release()
             cv2.destroyAllWindows()
             break

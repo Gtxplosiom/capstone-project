@@ -16,3 +16,4 @@ pytesseract
 win32gui
 win32ui
 win32api
+thefuzz

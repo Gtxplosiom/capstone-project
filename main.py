@@ -1,24 +1,26 @@
 import threading
-import UI
+import ui
 import voiceRecognition
-import FocusApp
-import keyboard, os
+import focusApp
+import keyboard
+import os
 
-def task1():
-    UI.startUI()
+def StartUI():
+    ui.StartUI()
 
-def task2():
-    voiceRecognition.voiceRecog()
+def VoiceRecognition():
+    voiceRecognition.VoiceRecog()
 
-def task3():
-    FocusApp.Focused()
+def FocusedApp():
+    focusApp.Focused()
 
-thread1 = threading.Thread(target=task1)
-thread2 = threading.Thread(target=task2)
-thread3 = threading.Thread(target=task3, daemon=True)
+if __name__ == "__main__":
+    thread1 = threading.Thread(target=StartUI)
+    thread2 = threading.Thread(target=VoiceRecognition)
+    thread3 = threading.Thread(target=FocusedApp, daemon=True)
 
-thread1.start()
-thread2.start()
-thread3.start()
+    thread1.start()
+    thread2.start()
+    thread3.start()
 
-keyboard.add_hotkey('esc', lambda: os._exit(1))
+    keyboard.add_hotkey('esc', lambda: os._exit(1))

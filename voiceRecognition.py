@@ -7,13 +7,13 @@ import time
 
 import clickOnScreen
 import cameraMouse
-import FocusApp
+import focusApp
 
-activateMouse = True
+activate_mouse = True
 
 pause = threading.Event()
 
-def trim_string(input_string, keywords):
+def TrimString(input_string, keywords):
     words = input_string.split()
 
     for keyword in keywords:
@@ -28,7 +28,7 @@ def trim_string(input_string, keywords):
     return input_string
 
 
-def voiceRecog():
+def VoiceRecog():
     model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
     recognizer = KaldiRecognizer(model, 16000)
 
@@ -42,88 +42,84 @@ def voiceRecog():
 
     while True:
         data = stream.read(4096, exception_on_overflow=False)
-        notepad_window = FocusApp.gw.getWindowsWithTitle('Notepad') # test
-        active_window = str(FocusApp.gw.getActiveWindow())
+        notepad_window = focusApp.gw.getWindowsWithTitle('Notepad') # test
+        active_window = str(focusApp.gw.getActiveWindow())
 
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
-            trimmedText = text[14:-3]
+            trimmed_text = text[14:-3]
             
             print("running")
 
-            # splitText = trimmedText.split(" ")
+            result = TrimString(trimmed_text, keywords)
 
-            # keyword = splitText[0].capitalize()
+            split_result = result.split(" ")
 
-            result = trim_string(trimmedText, keywords)
-
-            splitResult = result.split(" ")
-
-            keyword = splitResult[0].capitalize()
+            keyword = split_result[0].capitalize()
 
             print(result)
 
-            if result == "open mouse":
-                global activateMouse
-                activateMouse = True
-                thread1 = threading.Thread(target=cameraMouse.camera_mouse)
+            if "open mouse" in result:
+                global activate_mouse
+                activate_mouse = True
+                thread1 = threading.Thread(target=cameraMouse.CameraMouse)
                 thread1.start()
-            elif result == "close mouse":
-                activateMouse = False
+            elif "close mouse" in result:
+                activate_mouse = False
 
             # commands
             if keyword == "Click":
-                if len(result) > 1:
-                    command = splitResult[1].capitalize()
+                if len(split_result) > 1:
+                    command = split_result[1].capitalize()
                     print(command)
-                    clickOnScreen.click(command)
+                    clickOnScreen.Click(command)
                 else:
                     clickOnScreen.pyautogui.click()
-            elif keyword == "Double" and splitResult[1].capitalize() == "Click":
-                if len(splitResult) > 1:
-                    command = splitResult[2].capitalize()
+            elif keyword == "Double" and split_result[1].capitalize() == "Click":
+                if len(split_result) > 1:
+                    command = split_result[2].capitalize()
                     print(command)
-                    clickOnScreen.doubleClick(command)
+                    clickOnScreen.DoubleClick(command)
                 else:
                     clickOnScreen.pyautogui.doubleClick()
             elif keyword == "Look":
-                if len(splitResult) > 1:
-                    command = splitResult[1].capitalize()
+                if len(split_result) > 1:
+                    command = split_result[1].capitalize()
                     print(command)
-                    clickOnScreen.highlightTk(command)
+                    clickOnScreen.HighlightTk(command)
                 else:
                     print("What to find?")
             elif keyword == "Cancel":
                 print("Cancelled")
             elif keyword == "Hover":
-                command = splitResult[1].capitalize()
+                command = split_result[1].capitalize()
                 print(command)
                 clickOnScreen.hover(command)
             elif keyword == "Type":
-                voiceType()
+                VoiceType()
 
             # Active window
             elif 'Notepad' in active_window: # test (can be moved to another file)
-                FocusApp.Notepad()
+                focusApp.Notepad()
             elif 'Word' in active_window: # test (can be moved to another file)
-                FocusApp.Word()
+                focusApp.Word()
             elif 'Chrome' in active_window: # test (can be moved to another file)
-                FocusApp.Chrome()
+                focusApp.Chrome()
 
             else:
                 print("Waiting for a command")
 
-            def voiceType():
+            def VoiceType():
                 toggle = True
                 while toggle == True:
                     data = stream.read(4096, exception_on_overflow=False)
                     if recognizer.AcceptWaveform(data):
                         text = recognizer.Result()
-                        trimmedText = text[14:-3]
+                        trimmed_text = text[14:-3]
 
-                        splitText = trimmedText.split(" ")
+                        split_text = trimmed_text.split(" ")
 
-                        keyword = splitText[0].capitalize()
+                        keyword = split_text[0].capitalize()
 
                         if keyword == "Stop":
                                 toggle = False
@@ -134,11 +130,11 @@ def voiceRecog():
                             if len(keyword) == 0:
                                 print("Say something")
                             else:
-                                for i in range(len(splitText)):
-                                    transcribedText = [firsts[0] if firsts != "space" else "space" for firsts in splitText]
-                                    result = ''.join(transcribedText)
+                                for i in range(len(split_text)):
+                                    transcribed_text = [firsts[0] if firsts != "space" else "space" for firsts in split_text]
+                                    result = ''.join(transcribed_text)
                                 result = result.replace("space", " ")
-                                print(splitText)
+                                print(split_text)
                                 print(result)
                                 clickOnScreen.pyautogui.typewrite(result)
-                                transcribedText.clear()
+                                transcribed_text.clear()

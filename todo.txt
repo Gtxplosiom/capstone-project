@@ -12,11 +12,15 @@ speech recognition:
     make it responsive
     make it so that you do not need to enunciate words precisely to be understood
     add a cancel command so that the highlight frame would close
+    apply natural language processing for commands (spacy library/module)
+    find a way if it is possible to convert misheard words of vosk to the closest possible command (e.g. "tap" is close to "stop") (thefuzz library)
     improve speech recognition
 
 camera mouse:
     smoothen the mouse movement
-    make it so this is "callable" everytime
+    make it so this is "callable" everytime - check
+    move all mouse funtions to the camera mouse module
+        disable mouse functions if camera mouse is not opened
     to try:
         make the webcam zoom in
     stabilize the mouse cursor for better click precision

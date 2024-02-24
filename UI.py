@@ -1,90 +1,90 @@
 import tkinter as tk
 import sys
 
-def startUI():
+def StartUI():
     root = tk.Tk()
-    mainRoot = tk.Tk()
-    configWindow = tk.Tk()
-    mainRoot.withdraw()
-    configWindow.withdraw()
+    main_root = tk.Tk()
+    config_window = tk.Tk()
+    main_root.withdraw()
+    config_window.withdraw()
 
     root.geometry("960x540")
 
     def MaintoConf():
-        mainRoot.withdraw()
-        configWindow.deiconify()
-        config()
+        main_root.withdraw()
+        config_window.deiconify()
+        Config()
 
     def ConftoMain():
-        configWindow.withdraw()
-        mainRoot.deiconify()
-        mainUI
+        config_window.withdraw()
+        main_root.deiconify()
+        MainUI
 
     def toConfig():
-        mainRoot.withdraw()
-        configWindow.deiconify()
+        main_root.withdraw()
+        config_window.deiconify()
 
-    def quit():
+    def Quit():
         sys.exit()
 
-    def mainUI():
-        labelAsk.pack(padx=20, pady=20)
-        labelInstruct.pack(padx=20, pady=20)
-        configButton.pack()
-        exitButton.pack()
+    def MainUI():
+        label_ask.pack(padx=20, pady=20)
+        label_instruct.pack(padx=20, pady=20)
+        config_button.pack()
+        exit_button.pack()
 
-    def config():
-        calibrateButton.pack()
-        backConfig.pack()
+    def Config():
+        calibrate_button.pack()
+        back_config.pack()
 
-    def countdown(time):
+    def Countdown(time):
         if time == -1:
             root.destroy()
-            mainUI()
-            mainRoot.deiconify()
+            MainUI()
+            main_root.deiconify()
         else:
             if time == 0:
                 label.configure(text="Loaded successfully")
-                labelWelcome.destroy()
+                label_welcome.destroy()
                 label.pack(padx=20, pady=225)
             else:
                 label.configure(text="time remaining: %d seconds" % time)
 
-            root.after(1000, countdown, time-1)
+            root.after(1000, Countdown, time-1)
 
-    def hideHighlight():
+    def HideHighlight():
         highlight.withdraw()
 
-    def showHighlight():
+    def ShowHighlight():
         highlight.deiconify()
 
     # root Widgets
-    labelWelcome = tk.Label(root, text="Starting...", font=('Arial', 20))
-    labelWelcome.pack(padx=20, pady=225)
+    label_welcome = tk.Label(root, text="Starting...", font=('Arial', 20))
+    label_welcome.pack(padx=20, pady=225)
     label = tk.Label(root, font=('Arial', 20))
     label.pack()
     label2 = tk.Label(root, font=('Arial', 20))
     label2.pack()
 
-    # mainRoot Widgets
-    labelAsk = tk.Label(mainRoot, text="What do you want to do?", font=('Arial', 20))
-    labelInstruct = tk.Label(mainRoot, text="Say what you want to do, or click manually", font=('Arial', 20))
-    configButton = tk.Button(mainRoot, text="Configure", font=('Arial', 15), command=MaintoConf)
-    exitButton = tk.Button(mainRoot, text="Exit", font=('Arial', 15), command=quit)
+    # main_root Widgets
+    label_ask = tk.Label(main_root, text="What do you want to do?", font=('Arial', 20))
+    label_instruct = tk.Label(main_root, text="Say what you want to do, or click manually", font=('Arial', 20))
+    config_button = tk.Button(main_root, text="Configure", font=('Arial', 15), command=MaintoConf)
+    exit_button = tk.Button(main_root, text="Exit", font=('Arial', 15), command=Quit)
 
-    # configWindow Widgets
-    calibrateButton = tk.Button(configWindow, text="Calibrate", font=('Arial', 15))
-    backConfig = tk.Button(configWindow, text="Back", font=('Arial', 15), command=ConftoMain)
+    # config_window Widgets
+    calibrate_button = tk.Button(config_window, text="Calibrate", font=('Arial', 15))
+    back_config = tk.Button(config_window, text="Back", font=('Arial', 15), command=ConftoMain)
 
     # clickOnScreen highlighter widgets
     highlight = tk.Tk()
     highlight.attributes('-alpha', 0.5)
     highlight.attributes('-fullscreen', True)
-    canvasHighlight = tk.Canvas(highlight, bg='black')
-    canvasHighlight.pack(fill='both', expand=True)
+    canvas_highlight = tk.Canvas(highlight, bg='black')
+    canvas_highlight.pack(fill='both', expand=True)
 
-    countdown(5)
+    Countdown(5)
 
-    hideHighlight()
+    HideHighlight()
 
     root.mainloop()

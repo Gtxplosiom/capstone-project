@@ -3,8 +3,10 @@ import time
 from vosk import Model, KaldiRecognizer
 import pyaudio
 
+import threading
+
 import pyautogui
-import clickOnScreen
+import cameraMouse
 
 from win11toast import toast
 
@@ -14,7 +16,9 @@ recognizer = KaldiRecognizer(model, 16000)
 mic = pyaudio.PyAudio()
 stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True,frames_per_buffer=8192)
 
-def trim_string(input_string, keywords):
+activate_mouse = True
+
+def TrimString(input_string, keywords):
     words = input_string.split()
 
     for keyword in keywords:
@@ -31,7 +35,7 @@ def trim_string(input_string, keywords):
 def ActiveWindow():
     return gw.getActiveWindow().title if gw.getActiveWindow() else None
 
-def mouseScroll():
+def MouseScroll():
     screen_width, screen_height = pyautogui.size()
 
     x_coordinate = screen_width - 1  # Rightmost side
@@ -78,24 +82,37 @@ def Chrome():
         data = stream.read(4096, exception_on_overflow=False)
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
-            trimmedText = text[14:-3]
+            trimmed_text = text[14:-3]
 
-            result = trim_string(trimmedText, keywords)
+            print("running")
 
-            splitResult = result.split(" ")
+            result = TrimString(trimmed_text, keywords)
 
-            keyword = splitResult[0].capitalize()
+            split_result = result.split(" ")
 
-            String = splitResult[1:]
-            String = ' '.join(splitResult[1:]).replace("[", "").replace("]", "").replace(",", "")
+            keyword = split_result[0].capitalize()
 
-            # commands
+            print(result)
+
+            string = split_result[1:]
+            string = ' '.join(split_result[1:]).replace("[", "").replace("]", "").replace(",", "")
+
+            # camera mouse
+            if result == "open mouse" or result == "open mouth" or result == "open most":
+                global activate_mouse
+                activate_mouse = True
+                thread1 = threading.Thread(target=cameraMouse.CameraMouse)
+                thread1.start()
+            elif result == "close mouse" or result == "close mouth" or result == "close most":
+                activate_mouse = False
+
+            # commands block
             if keyword == "Search":
                 pyautogui.hotkey('ctrl', 'l')
                 time.sleep(0.5)
                 pyautogui.hotkey('backspace')
             elif keyword == "Write" or keyword == "Right":
-                pyautogui.typewrite(str(String))
+                pyautogui.typewrite(str(string))
             elif keyword == "Enter":
                 pyautogui.hotkey('enter')
             elif keyword == "Up":
@@ -107,10 +124,10 @@ def Chrome():
             elif "close tab" in result:
                 pyautogui.hotkey('ctrl', 'w')
             elif "scroll down" in result:
-                mouseScroll()
+                MouseScroll()
                 pyautogui.scroll(-1000)
             elif "scroll up" in result:
-                mouseScroll()
+                MouseScroll()
                 pyautogui.scroll(1000)
             else:
                 pass

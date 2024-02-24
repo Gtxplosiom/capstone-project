@@ -10,12 +10,12 @@ import tkinter
 
 pytesseract.pytesseract.tesseract_cmd = (r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\tesseractOCR\tesseract.exe") # needed for Windows as OS
 
-def hide_all_roots():
+def HideAllRoots():
     for root in tkinter._root_window_list():
         root.withdraw()
 
 
-def highlightItems():
+def HighlightItems():
     dc = win32gui.GetDC(0)
     dcObj = win32ui.CreateDCFromHandle(dc)
     hwnd = win32gui.WindowFromPoint((0,0))
@@ -32,7 +32,7 @@ def highlightItems():
 
         win32gui.InvalidateRect(hwnd, monitor, True) # Refresh the entire monitor
 
-def highlightTk(text, lang='eng'):
+def HighlightTk(text, lang='eng'):
     screenshot = pyautogui.screenshot()
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
 
@@ -43,11 +43,11 @@ def highlightTk(text, lang='eng'):
         # Filter rows in DataFrame where text is equal to text
         item_instances = data[data['text'] == text]
 
-        numItems = len(item_instances)
+        num_items = len(item_instances)
 
-        print(numItems)
+        print(num_items)
 
-        if numItems > 1:
+        if num_items > 1:
 
             root = tkinter.Tk()
             root.attributes('-alpha', 0.5)
@@ -56,7 +56,7 @@ def highlightTk(text, lang='eng'):
             canvas = tkinter.Canvas(root, bg='black')
             canvas.pack(fill='both', expand=True)
 
-            print(numItems)
+            print(num_items)
 
             # Loop through each instance of the input text and draw a rectangle with a label
             for idx, (index, row) in enumerate(item_instances.iterrows(), 1):
@@ -83,12 +83,12 @@ def highlightTk(text, lang='eng'):
     
     return(x, y)
 
-def clickPic(icon):
+def ClickPic(icon):
     locations = pyautogui.locateAllOnScreen(f'media\{icon}.png', confidence=0.5)
     for location in locations:
         print(location)
 
-def click(text, lang='eng'):
+def Click(text, lang='eng'):
     screenshot = pyautogui.screenshot()
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
 
@@ -107,7 +107,7 @@ def click(text, lang='eng'):
 
     return(x, y)
 
-def doubleClick(text, lang='eng'):
+def DoubleClick(text, lang='eng'):
     screenshot = pyautogui.screenshot()
 
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
@@ -127,7 +127,7 @@ def doubleClick(text, lang='eng'):
 
     return(x, y)
 
-def hover(text, lang='eng'):
+def Hover(text, lang='eng'):
     screenshot = pyautogui.screenshot()
 
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
@@ -147,7 +147,7 @@ def hover(text, lang='eng'):
 
     return(x, y)
 
-def scroll(direction):
+def Scroll(direction):
     if direction == "up":
         pyautogui.scroll(2000)
     elif direction == "down":
