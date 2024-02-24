@@ -56,3 +56,36 @@ OCR:
     voice typing letter-by-letter
 
 list the used modules and libraries
+
+
+
+
+feature list:
+
+commands:
+    mouse functions
+        click
+            double click
+        right click
+        scroll
+        drag
+    keyboard
+        voice typing
+            word typing
+            letter by letter typing
+    in-app unique commands
+        desktop
+            accessibility settings
+                brightness
+                volume
+                screenshot
+        chrome
+            search
+            tab controls
+            website commands
+                youtube
+                facebook
+                
+
+            
+

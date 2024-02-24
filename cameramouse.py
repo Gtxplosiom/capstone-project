@@ -1,7 +1,7 @@
 import cv2
 import dlib
 import pyautogui as screen
-import voiceRecognition
+import voiceRecognitionOffline
 import focusApp
 import time
 
@@ -66,7 +66,7 @@ def CameraMouse():
         cv2.imshow('Frame', flipped_frame)
 
         key = cv2.waitKey(1)
-        if voiceRecognition.activate_mouse == False:
+        if voiceRecognitionOffline.activate_mouse == False:
             cap.release()
             cv2.destroyAllWindows()
             break

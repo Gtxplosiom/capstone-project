@@ -1,0 +1,5 @@
+name: D:\Capstone\capstone
+channels:
+  - conda-forge
+  - defaults
+prefix: D:\Capstone\capstone
