@@ -2,6 +2,7 @@ system:
     make it so functions like cameraMouse and clickOnScreen can be activated and turned off - check
     figure out to pause and resume threads - check
     create one-time tutorial panels containing what commands are available in word, chrome or other applications and as well as how to use the command
+    functions need to be "cleaned" and flexible. (especially functions that are "overlayable". camera mouse and app switching(to be made))
 
 gui:
     to be made
@@ -80,12 +81,11 @@ commands:
                 volume
                 screenshot
         chrome
-            search
-            tab controls
+            app commands
+                search - kinda check
+                maximize - check
+                new tab - check
+                close tab - hayss
             website commands
                 youtube
                 facebook
-                
-
-            
-

@@ -9,7 +9,7 @@ pyautogui
 win11toast
 tkinter
 sys
-cv2
+cv2 (opencv-python)
 dlib
 numpy
 pytesseract

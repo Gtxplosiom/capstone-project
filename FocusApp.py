@@ -10,6 +10,8 @@ import cameraMouse
 
 from win11toast import toast
 
+from AppOpener import open, close
+
 model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
 recognizer = KaldiRecognizer(model, 16000)
 
@@ -75,7 +77,7 @@ def Chrome():
     Toast("Google Chrome")
 
     # keywords for command (Chrome) to "keyword spot" the keywords in between sentences
-    keywords = ["search", "new", "find", "scroll", "write", "right", "enter", "up", "down"]
+    keywords = ["search", "new", "find", "scroll", "write", "right", "enter", "up", "down", "maximize", "maximise", "click"]
 
     while toggle == True:
         active_window = ActiveWindow()
@@ -109,7 +111,7 @@ def Chrome():
             # commands block
             if keyword == "Search":
                 pyautogui.hotkey('ctrl', 'l')
-                time.sleep(0.5)
+                time.sleep(0.1)
                 pyautogui.hotkey('backspace')
             elif keyword == "Write" or keyword == "Right":
                 pyautogui.typewrite(str(string))
@@ -129,6 +131,14 @@ def Chrome():
             elif "scroll up" in result:
                 MouseScroll()
                 pyautogui.scroll(1000)
+            elif keyword == "Maximize" or keyword == "Maximise":
+                pyautogui.hotkey('alt', 'space')
+                time.sleep(0.1)
+                pyautogui.hotkey('x')
+            elif keyword == "Click":
+                pyautogui.click()
+            elif "close browser" in result:
+                close("google chrome")
             else:
                 pass
         if 'Chrome' not in str(active_window):

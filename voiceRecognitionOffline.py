@@ -9,6 +9,8 @@ import clickOnScreen
 import cameraMouse
 import focusApp
 
+from AppOpener import open
+
 activate_mouse = True
 
 pause = threading.Event()
@@ -37,8 +39,8 @@ def VoiceRecog():
     stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True,frames_per_buffer=8192)
     stream.start_stream()
 
-    # keywords for command
-    keywords = ["click", "double", "look"]
+    # keywords for command (for keyword matching in between sentences)
+    keywords = ["click", "double", "look", "open"]
 
     while True:
         data = stream.read(4096, exception_on_overflow=False)
@@ -77,11 +79,18 @@ def VoiceRecog():
                     clickOnScreen.pyautogui.click()
             elif keyword == "Double" and split_result[1].capitalize() == "Click":
                 if len(split_result) > 1:
-                    command = split_result[2].capitalize()
+                    command = split_result[1].capitalize()
                     print(command)
                     clickOnScreen.DoubleClick(command)
                 else:
                     clickOnScreen.pyautogui.doubleClick()
+            elif keyword == "Open":
+                if len(split_result) > 1:
+                    command = split_result[1].capitalize()
+                    print(command)
+                    OpenApp(command)
+                else:
+                    pass
             elif keyword == "Look":
                 if len(split_result) > 1:
                     command = split_result[1].capitalize()
@@ -138,3 +147,8 @@ def VoiceRecog():
                                 print(result)
                                 clickOnScreen.pyautogui.typewrite(result)
                                 transcribed_text.clear()
+            def OpenApp(App):
+                if App == "Browser":
+                    open("google chrome")
+                elif App == "Notes" or App == "Notepad" or App == "Note":
+                    open("notepad")
