@@ -17,6 +17,8 @@ speech recognition:
     find a way if it is possible to convert misheard words of vosk to the closest possible command (e.g. "tap" is close to "stop") (thefuzz library)
     improve speech recognition
 
+    overhaul to whisper
+
 camera mouse:
     smoothen the mouse movement
     make it so this is "callable" everytime - check
