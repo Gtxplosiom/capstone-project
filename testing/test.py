@@ -28,10 +28,16 @@ def whisper():
                             temp_audio.write(audio.get_wav_data())
 
                         # Transcribe using Whisper
-                        result = tiny_model.transcribe(temp_audio_path)
+                        result = base_model.transcribe(temp_audio_path)
                         prompt_text = result['text']
 
                         print(f"You said: {prompt_text}")
+
+                        if "Open" in prompt_text and "new" in prompt_text and "tab" in prompt_text:
+                            print("Opened a new tab")
+                        elif "Close" in prompt_text and "tab" in prompt_text:
+                            print("Closed the tab")
+
 
                         # Remove the temporary audio file
                         os.remove(temp_audio_path)
