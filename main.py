@@ -1,7 +1,6 @@
 import threading
 import ui
-import voiceRecognitionOffline
-import voiceRecognitionOnline
+import speechRecognition
 import focusApp
 import requests
 import keyboard
@@ -10,11 +9,8 @@ import os
 def StartUI():
     ui.StartUI()
 
-def VoiceRecognitionOffline():
-    voiceRecognitionOffline.VoiceRecog()
-
-def VoiceRecognitionOnline():
-    voiceRecognitionOnline.VoiceRecog()
+def SpeechRecognition():
+    speechRecognition.VoiceRecog()
 
 def FocusedApp():
     focusApp.Focused()
@@ -30,7 +26,7 @@ if __name__ == "__main__":
     if internet_connection():
         print("The Internet is connected.")
         thread1 = threading.Thread(target=StartUI)
-        thread2 = threading.Thread(target=VoiceRecognitionOffline)
+        thread2 = threading.Thread(target=SpeechRecognition)
         thread2_5 = threading.Thread()
         thread3 = threading.Thread(target=FocusedApp, daemon=True)
         thread1.start()
@@ -39,7 +35,7 @@ if __name__ == "__main__":
     else:
         print("The Internet is not connected.")
         thread1 = threading.Thread(target=StartUI)
-        thread2 = threading.Thread(target=VoiceRecognitionOffline)
+        thread2 = threading.Thread(target=SpeechRecognition)
         thread2_5 = threading.Thread()
         thread3 = threading.Thread(target=FocusedApp, daemon=True)
         thread1.start()

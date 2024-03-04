@@ -1,102 +1,32 @@
-def whisper():
-    ## whisper
-    import speech_recognition as sr
-    import whisper
-    import tempfile
-    import os
+import cv2
 
-    tiny_model = whisper.load_model('models/tiny.en.pt')
-    base_model = whisper.load_model('models/base.en.pt')
+face_cascade_path = 'absolute/path/to/haarcascade_frontalface_default.xml'
+face_cascade = cv2.CascadeClassifier(face_cascade_path)
 
-    def continuous_listen():
-        recognizer = sr.Recognizer()
-        microphone = sr.Microphone()
+if face_cascade.empty():
+    print("Error: Unable to load the face cascade classifier.")
 
-        with microphone as source:
-            print("Adjusting for ambient noise. Please wait...")
-            recognizer.adjust_for_ambient_noise(source, duration=5)
-            print("Listening...")
+# Open a video capture object (you can replace '0' with the path to your video file)
+cap = cv2.VideoCapture(0)
 
-        try:
-            while True:
-                with microphone as source:
-                    try:
-                        audio = recognizer.listen(source, timeout=None)
-                        # Save the audio to a temporary file
-                        with tempfile.NamedTemporaryFile(delete=False) as temp_audio:
-                            temp_audio_path = temp_audio.name
-                            temp_audio.write(audio.get_wav_data())
+while True:
+    # Read a frame from the video stream
+    ret, frame = cap.read()
 
-                        # Transcribe using Whisper
-                        result = base_model.transcribe(temp_audio_path)
-                        prompt_text = result['text']
+    if not ret:
+        break
 
-                        print(f"You said: {prompt_text}")
+    # Convert the frame to grayscale for face detection
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-                        if "Open" in prompt_text and "new" in prompt_text and "tab" in prompt_text:
-                            print("Opened a new tab")
-                        elif "Close" in prompt_text and "tab" in prompt_text:
-                            print("Closed the tab")
+    # Enhance contrast using histogram equalization
+    gray = cv2.equalizeHist(gray)
 
+    # Detect faces
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-                        # Remove the temporary audio file
-                        os.remove(temp_audio_path)
-                        
-                    except sr.UnknownValueError:
-                        print("Could not understand audio.")
-                    except sr.RequestError as e:
-                        print(f"Error with the API request; {e}")
+    # Draw rectangles around the faces
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        except KeyboardInterrupt:
-            print("Stopping the continuous listening.")
-
-
-    continuous_listen()
-
-def fasterWhisper():
-    from faster_whisper import WhisperModel
-    import speech_recognition as sr
-    import tempfile
-    import os
-
-    model = WhisperModel('tiny.en', compute_type="int8")
-
-    def continuous_listen():
-        recognizer = sr.Recognizer()
-        microphone = sr.Microphone()
-
-        with microphone as source:
-            print("Adjusting for ambient noise. Please wait...")
-            recognizer.adjust_for_ambient_noise(source, duration=5)
-            print("Listening...")
-
-        try:
-            while True:
-                with microphone as source:
-                    try:
-                        audio = recognizer.listen(source, timeout=None)
-                        # Save the audio to a temporary file
-                        with tempfile.NamedTemporaryFile(delete=False) as temp_audio:
-                            temp_audio_path = temp_audio.name
-                            temp_audio.write(audio.get_wav_data())
-
-                        # Transcribe using Whisper
-                        segments, _ = model.transcribe(temp_audio)
-                        text = ''.join(segment.text for segment in segments)
-                        print(f"You said: {text}")
-
-                        # Remove the temporary audio file
-                        os.remove(temp_audio_path)
-                        
-                    except sr.UnknownValueError:
-                        print("Could not understand audio.")
-                    except sr.RequestError as e:
-                        print(f"Error with the API request; {e}")
-
-        except KeyboardInterrupt:
-            print("Stopping the continuous listening.")
-
-
-    continuous_listen()
-
-whisper()
+    # Di

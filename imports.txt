@@ -21,3 +21,6 @@ whisper
 SpeechRecognition
 tempfile
 pygame
+selenium
+customTkinter
+webdriver-manager

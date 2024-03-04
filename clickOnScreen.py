@@ -119,6 +119,7 @@ def DoubleClick(text, lang='eng'):
 
     except IndexError:
         print("Text was not found")
+        pyautogui.doubleClick()
         return None
 
     print(x, y)

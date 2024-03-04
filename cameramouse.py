@@ -1,13 +1,11 @@
 import cv2
 import dlib
 import pyautogui as screen
-import voiceRecognitionOffline
-import focusApp
-import time
+
+import openThings
+import tutorial
 
 screen.FAILSAFE = False
-
-activate = True
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("models/shape_predictor_68_face_landmarks.dat")
@@ -21,7 +19,13 @@ adjustment_y = 185 # increase if cursor is far up from the center
 screen.PAUSE=0
 
 def CameraMouse():
-    cap = cv2.VideoCapture(0) # 0 is index for webcams
+
+    global activate_mouse  # Declare as global
+
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor("models/shape_predictor_68_face_landmarks.dat")
+
+    cap = cv2.VideoCapture(0)  # 0 is index for webcams
 
     while True:
         _, frame = cap.read()
@@ -44,8 +48,8 @@ def CameraMouse():
             xx = landmarks.part(30).x
             yy = landmarks.part(30).y
 
-            follow_x = xx-205
-            follow_y = yy-185
+            follow_x = xx - 205
+            follow_y = yy - 185
 
             current_pos = screen.position()
 
@@ -58,19 +62,15 @@ def CameraMouse():
             check_x = previous_x - current_x
             check_y = previous_y - current_y
 
-            screen.moveTo(follow_x*sensitivity_x-current_x, follow_y*sensitivity_y-current_y, duration=0.1)
-            
-            cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0,255,0), 3)
+            screen.moveTo(follow_x * sensitivity_x - current_x, follow_y * sensitivity_y - current_y, duration=0.1)
+
+            cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
             cv2.circle(flipped_frame, (xx, yy), 3, (255, 0, 0), -1)
 
         cv2.imshow('Frame', flipped_frame)
 
         key = cv2.waitKey(1)
-        if voiceRecognitionOffline.activate_mouse == False:
-            cap.release()
-            cv2.destroyAllWindows()
-            break
-        elif focusApp.activate_mouse == False:
+        if not openThings.activate_mouse:
             cap.release()
             cv2.destroyAllWindows()
             break
