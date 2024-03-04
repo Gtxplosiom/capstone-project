@@ -18,6 +18,7 @@ speech recognition:
     improve speech recognition
 
     overhaul to whisper
+    make it possible even if you speak filipino it can execute and understand commands
 
 camera mouse:
     smoothen the mouse movement
@@ -57,8 +58,6 @@ OCR:
     add a habit monitoring function, so that the app will recognize repetetive tasks overtime and will automatically execute the tasks improving the quality of life of the users (for statistics purposes)
     automatic "click" when you say certain words that is in the screen
     voice typing letter-by-letter
-
-list the used modules and libraries
 
 
 
