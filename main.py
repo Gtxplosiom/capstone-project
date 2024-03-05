@@ -1,19 +1,12 @@
 import threading
-import ui
 import speechRecognition
-import focusApp
 import requests
 import keyboard
 import os
 
-def StartUI():
-    ui.StartUI()
-
-def SpeechRecognition():
-    speechRecognition.VoiceRecog()
-
-def FocusedApp():
-    focusApp.Focused()
+def ASR():
+    print("Starting ASR...")
+    speechRecognition.Whisper_Recognition()
 
 def internet_connection():
     try:
@@ -25,21 +18,12 @@ def internet_connection():
 if __name__ == "__main__":
     if internet_connection():
         print("The Internet is connected.")
-        thread1 = threading.Thread(target=StartUI)
-        thread2 = threading.Thread(target=SpeechRecognition)
-        thread2_5 = threading.Thread()
-        thread3 = threading.Thread(target=FocusedApp, daemon=True)
+        thread1 = threading.Thread(target=ASR)
         thread1.start()
-        thread2.start()
-        thread3.start()
+
     else:
         print("The Internet is not connected.")
-        thread1 = threading.Thread(target=StartUI)
-        thread2 = threading.Thread(target=SpeechRecognition)
-        thread2_5 = threading.Thread()
-        thread3 = threading.Thread(target=FocusedApp, daemon=True)
+        thread1 = threading.Thread(target=ASR)
         thread1.start()
-        thread2.start()
-        thread3.start()
 
     keyboard.add_hotkey('esc', lambda: os._exit(1))

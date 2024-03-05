@@ -4,7 +4,7 @@ import threading
 import subprocess
 
 activate_mouse = False
-
+    
 def open(things):
     print(f"Opening {things}...")
     if things == "Mouse":
@@ -13,7 +13,6 @@ def open(things):
         thread1 = threading.Thread(target=cameraMouse.CameraMouse)
         thread1.start()
     elif things == "Tutorial":
-        tutorial.activate_tsr = True
         thread2 = threading.Thread(target=tutorial.Tutorial)
         thread2.start()
     else:
