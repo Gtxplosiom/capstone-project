@@ -2,6 +2,7 @@ import pyautogui
 import cv2
 import numpy as np
 import pytesseract
+import os
 
 import win32gui, win32ui
 from win32api import GetSystemMetrics
@@ -13,7 +14,6 @@ pytesseract.pytesseract.tesseract_cmd = (r"C:\Users\admin\Desktop\TRYZLER\Capsto
 def HideAllRoots():
     for root in tkinter._root_window_list():
         root.withdraw()
-
 
 def HighlightItems():
     dc = win32gui.GetDC(0)
@@ -83,10 +83,55 @@ def HighlightTk(text, lang='eng'):
     
     return(x, y)
 
-def ClickPic(icon):
-    locations = pyautogui.locateAllOnScreen(f'media\{icon}.png', confidence=0.5)
-    for location in locations:
-        print(location)
+def Click_Image(img_loc: str, what: str):
+    screenshot = pyautogui.screenshot()
+    screenshot.save(r"D:\Capstone\Capstone-Application\models\screenshot.png")
+
+    numbers = ["First", "Second", "Third", "Fourth", "FIfth", "Sixth", "Seventh", "Eighth", "Nineth", "Tenth"]
+    input = numbers.index(what)
+
+    user_img = cv2.imread(img_loc, cv2.IMREAD_GRAYSCALE)
+    ref_img = cv2.imread('models/screenshot.png', cv2.IMREAD_GRAYSCALE)
+
+    result = cv2.matchTemplate(ref_img, user_img, cv2.TM_CCOEFF_NORMED)
+
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+
+    w = user_img.shape[1]
+    h = user_img.shape[0]
+
+    threshold = 0.58
+
+    yloc, xloc = np.where(result >= threshold)
+
+    ## grouping of rectangles to avoid multiple matching in a single location
+    rectangles = []
+    for (x, y) in zip(xloc, yloc):
+        ## duplicate so that there is at least 2 rectangles on top of each other
+        rectangles.append([int(x), int(y), int(w), int(h)])
+        rectangles.append([int(x), int(y), int(w), int(h)])
+    rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.2)
+
+    ## print how many are detected
+    print(len(rectangles))
+
+    rectangles_info = []
+    rectangles = sorted(rectangles, key=lambda x: x[0])  # Sort rectangles based on x-coordinates
+
+    for i, (x, y, w, h) in enumerate(rectangles):
+        cv2.rectangle(ref_img, (x, y), (x + w, y + h), (0, 255, 255), 2)
+        cv2.putText(ref_img, str(i + 1), (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+
+        # Print coordinates
+        print(f"Rectangle {i} coordinates: x={x}, y={y}")
+        rectangles_info.append((x+75, y+75))
+
+    pyautogui.click(rectangles_info[input])
+    os.remove("models/screenshot.png")
+
+    # cv2.imshow('Reference', ref_img)
+    # cv2.waitKey()
+    # cv2.destroyAllWindows()
 
 def Click(text, lang='eng'):
     screenshot = pyautogui.screenshot()

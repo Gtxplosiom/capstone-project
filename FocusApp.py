@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import clickOnScreen
 
 def Tutorial(command: str):
     ## commands block
@@ -31,7 +32,23 @@ def Chrome(string: str):
     command = string[0].capitalize()
     text = ' '.join(string[1:])
 
-    if command == "Search":
+    if command == "Login":
+        if len(string) > 1:
+            command = string[1].capitalize()
+            img_loc = "models/shesh.png"
+            print("clicking image...")
+            clickOnScreen.Click_Image(img_loc, command)
+        else:
+            pass
+    elif command == "Log":
+        if len(string) > 2:
+            command = string[2].capitalize()
+            img_loc = "models/shesh.png"
+            print("clicking image...")
+            clickOnScreen.Click_Image(img_loc, command)
+        else:
+            pass
+    elif command == "Search":
         pyautogui.hotkey('ctrl', 'l')
         time.sleep(0.1)
         pyautogui.hotkey('backspace')

@@ -4,6 +4,7 @@ import pygetwindow as gw
 import clickOnScreen
 import focusApp
 import openThings
+import clickOnScreen
 import tutorial
 
 import threading
@@ -106,10 +107,11 @@ def Whisper_Recognition():
                     split_result = prompt_text[1:].split(" ")
                     keyword = split_result[0].capitalize()
 
-                    print(f"You said: {prompt_text}")
-                    print(split_result)
+                    # print(f"You said: {prompt_text}")
+                    # print(split_result)
 
                     focusApp.Chrome(prompt_text)
+                    
                         
                     os.remove(temp_audio_path)
 

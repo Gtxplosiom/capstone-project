@@ -83,6 +83,7 @@ commands:
                 screenshot
         chrome
             app commands
+                login via users - check
                 search - kinda check
                 maximize - check
                 new tab - check
