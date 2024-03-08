@@ -12,7 +12,7 @@ def open(things):
         activate_mouse = True
         thread1 = threading.Thread(target=cameraMouse.CameraMouse)
         thread1.start()
-    elif things == "Tutorial":
+    elif things == "Tutorial" or things == "Guide":
         thread2 = threading.Thread(target=tutorial.Tutorial)
         thread2.start()
     else:

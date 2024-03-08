@@ -15,6 +15,13 @@ def HideAllRoots():
     for root in tkinter._root_window_list():
         root.withdraw()
 
+# def clickSelected(what: str):
+#     global items
+#     global selecting
+#     input = items.index(what)
+#     pyautogui.click(items[input])
+#     selecting = False
+
 def HighlightItems():
     dc = win32gui.GetDC(0)
     dcObj = win32ui.CreateDCFromHandle(dc)
@@ -39,6 +46,7 @@ def HighlightTk(text: str, lang='eng'):
     data = pytesseract.image_to_data(img, lang=lang, output_type='data.frame')
     text = text.lower()
     print(text)
+
     try:
         x, y = data[data['text'] == text]['left'].iloc[0], data[data['text'] == text]['top'].iloc[0]
         # Filter rows in DataFrame where text is equal to text
@@ -46,10 +54,10 @@ def HighlightTk(text: str, lang='eng'):
 
         num_items = len(item_instances)
 
+        print(item_instances)
         print(num_items)
 
         if num_items > 1:
-
             root = tkinter.Tk()
             root.attributes('-alpha', 0.5)
             root.attributes('-fullscreen', True)
@@ -71,7 +79,7 @@ def HighlightTk(text: str, lang='eng'):
                 label_x = (x1 + x2) / 2
                 label_y = y1 - 10
                 canvas.create_text(label_x, label_y, text=str(idx), fill='white')
-
+            
             root.after(5000, root.destroy)
 
             root.mainloop()

@@ -23,6 +23,7 @@ def Tutorial():
     global main_next
     global activate_tsr
 
+    activate_tsr = True
     tutorial_intro = True
     tutorial_mouse = False
 
