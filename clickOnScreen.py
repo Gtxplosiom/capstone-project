@@ -32,16 +32,17 @@ def HighlightItems():
 
         win32gui.InvalidateRect(hwnd, monitor, True) # Refresh the entire monitor
 
-def HighlightTk(text, lang='eng'):
+def HighlightTk(text: str, lang='eng'):
     screenshot = pyautogui.screenshot()
     img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
 
     data = pytesseract.image_to_data(img, lang=lang, output_type='data.frame')
+    text = text.lower()
     print(text)
     try:
         x, y = data[data['text'] == text]['left'].iloc[0], data[data['text'] == text]['top'].iloc[0]
         # Filter rows in DataFrame where text is equal to text
-        item_instances = data[data['text'] == text]
+        item_instances = data[data['text'].str.lower() == text]
 
         num_items = len(item_instances)
 
@@ -74,8 +75,8 @@ def HighlightTk(text, lang='eng'):
             root.after(5000, root.destroy)
 
             root.mainloop()
-
-        pyautogui.moveTo(x, y)
+        else:
+            pyautogui.click(x, y)
 
     except IndexError:
         print("Text was not found")

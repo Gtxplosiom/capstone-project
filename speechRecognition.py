@@ -146,7 +146,7 @@ def Whisper_Recognition():
                         if len(split_result) > 1:
                             command = split_result[1].capitalize()
                             print(command)
-                            clickOnScreen.Click(command)
+                            clickOnScreen.HighlightTk(command)
                         else:
                             clickOnScreen.pyautogui.click()
                     if keyword == "Open":
@@ -163,7 +163,6 @@ def Whisper_Recognition():
                             openThings.close(command)
                         else:
                             pass
-
 
                     os.remove(temp_audio_path)
 
