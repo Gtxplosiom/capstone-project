@@ -2,15 +2,9 @@ import pyautogui
 import time
 import clickOnScreen
 
-def Tutorial(command: str):
-    ## commands block
-    string = string[1:].split(" ")
-    command = string[0].capitalize()
-    text = ' '.join(string[1:])
-
-    if command == "Next":
+class FocusThings:
+    def __init__(self):
         pass
-
 
 def MouseScroll():
     screen_width, screen_height = pyautogui.size()
@@ -42,10 +36,11 @@ def Chrome(string: str):
             pass
     elif command == "Log":
         if len(string) > 2:
-            command = string[2].capitalize()
-            img_loc = "models/shesh.png"
-            print("clicking image...")
-            clickOnScreen.Click_Image(img_loc, command)
+            if string[1] == "in":
+                command2 = string[2].capitalize()
+                img_loc = "models/shesh.png"
+                print("clicking image...")
+                clickOnScreen.Click_Image(img_loc, command2)
         else:
             pass
     elif command == "Search":
@@ -60,7 +55,15 @@ def Chrome(string: str):
     elif command == "Up":
         pyautogui.hotkey('up')
     elif command == "Down":
-        pyautogui.hotkey('down')
+        if len(string) > 1:
+            command2 = string[1]
+            list = ["once", "twice", "thrice"]
+            command2 = list.index(command2)
+            for x in range(command2):
+                time.sleep(0.1)
+                pyautogui.hotkey('down')
+        else:
+            pyautogui.hotkey('down')
     elif "New tab" in command:
         pyautogui.hotkey('ctrl', 't')
     elif command == "Close":
@@ -75,3 +78,13 @@ def Chrome(string: str):
         pass
     else:
         pass
+
+def Guide(string: str):
+    from tutorial import Tutorial
+
+    string = string[1:].split(" ")
+    command = string[0].capitalize()
+    text = ' '.join(string[1:])
+
+    if command == "Next":
+        Tutorial.game_state += 1

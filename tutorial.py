@@ -1,87 +1,69 @@
 import pygame
-import openThings
 import time
+import sys
 
-## bool variables
-activate_tsr = False
+class Tutorial:
 
-## next flags
-main_next = False
-tutorial_next = False
+    game_state = 0
 
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption("Main Window")
 
-def Tutorial():
-    pygame.init()
+        self.screen_width = 800
+        self.screen_height = 600
 
-    screen_width = 800
-    screen_height = 600
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Main Window")
+        self.running = True
 
-    ## bool variables
-    global main_next
-    global activate_tsr
+    def set_font_style(self, style: str, size: int):
+        self.font = pygame.font.SysFont(style, size)
+        return self.font
 
-    activate_tsr = True
-    tutorial_intro = True
-    tutorial_mouse = False
+    def set_font_color(self, R, G, B) -> int:
+        self.font_color = (R, G, B)
+        return self.font_color
 
-    ## font stuff
-    def Font(style: str, size: int):
-        font = pygame.font.SysFont(style, size)
-        return font
+    def put_text(self, text: str, font: object, text_col: object, x: int, y: int):
+        self.img = font.render(text, True, text_col)
+        self.screen.blit(self.img, (x, y))
     
-    def Font_Color(R, G, B) -> int:
-        font_color = (R, G, B)
-        return font_color
-
-    def Put_Text(text, font, text_col, x, y):
-        img = font.render(text, True, text_col)
-        screen.blit(img, (x, y))
-
-    ## loop
-    
-    ## tutorial_intro
-    while tutorial_intro:
-
-        screen.fill((52, 78, 91))
-
-        if not main_next:
-            Put_Text("Welcome to the Application!", Font("arial", 50), Font_Color(255, 255, 255), 160, 250)
-            Put_Text("I am here to walk you through this app", Font("arial", 25), Font_Color(255, 255, 255), 235, 310)
-            Put_Text("Say 'Next' to continue", Font("arial", 25), Font_Color(255, 255, 255), 310, 350)
-        elif main_next:
-            Put_Text("This app makes use of camera for mouse movements", Font("arial", 25), Font_Color(255, 255, 255), 200, 250)
-            Put_Text("Make sure you are in a well lit room", Font("arial", 25), Font_Color(255, 255, 255), 225, 280)
-            Put_Text("Also center your face in the camera, for better experience", Font("arial", 25), Font_Color(255, 255, 255), 190, 310)
-            Put_Text("Enable mouse by saying 'Open mouse'", Font("arial", 25), Font_Color(255, 255, 255), 225, 340)
-        if openThings.activate_mouse == True:
-            tutorial_mouse = True
-            tutorial_intro = False
-
-        ## event handler (IMPORTANT!)
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                tutorial_intro = False
+                self.running = False
 
+    def update(self):
+        if self.game_state == 0:
+            self.part_1()
+        elif self.game_state == 1:
+            self.part_2()
+
+    def run(self):
+        while self.running:
+            self.handle_events()
+            self.update()
+
+        # Quit Pygame when the game loop ends
+        pygame.quit()
+
+    ## game states
+    def part_1(self):
+        self.screen.fill((255, 255, 255))
+        self.put_text("Welcome to the Tutorial! I am here to walk you through this app.", self.set_font_style("arial", 25), self.set_font_color(0, 0, 0), 200, 200)
+        self.put_text("Say 'Next' to proceed.", self.set_font_style("arial", 20), self.set_font_color(0, 0, 0), 200, 225)
         pygame.display.update()
 
-    while tutorial_mouse:
-        
-        screen.fill((52, 78, 91))
-
-        if not tutorial_next:
-            Put_Text("Try moving your head around", Font("arial", 25), Font_Color(255, 255, 255), 225, 280)
-            Put_Text("Say 'Next' to continue", Font("arial", 25), Font_Color(255, 255, 255), 310, 350)
-        elif tutorial_next:
-            Put_Text("If you noticed chuchu.....", Font("arial", 25), Font_Color(255, 255, 255), 310, 350)
-
-        ## event handler (IMPORTANT!)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                tutorial_mouse = False
-
+    def part_2(self):
+        self.screen.fill((255, 255, 255))
+        self.put_text("This app makes use of camera for mouse movements.", self.set_font_style("arial", 20), self.set_font_color(0, 0, 0), 200, 200)
+        self.put_text("First let us open camera first to enable mouse control.", self.set_font_style("arial", 20), self.set_font_color(0, 0, 0), 200, 225)
+        self.put_text("Make sure you are in a well lit room. and center you face in the camera.", self.set_font_style("arial", 20), self.set_font_color(0, 0, 0), 200, 250)
+        self.put_text("Enable it by saying 'Open mouse'.", self.set_font_style("arial", 20), self.set_font_color(0, 0, 0), 200, 225)
         pygame.display.update()
 
-    pygame.quit()
+if __name__ == "__main__":
+    # Create an instance of the PygameExample class and run the game loop
+    game = Tutorial()
+    game.run()

@@ -1,10 +1,10 @@
 import cameraMouse
-import tutorial
 import threading
 import subprocess
 
 activate_mouse = False
-    
+tutorial_active = False
+
 def open(things):
     print(f"Opening {things}...")
     if things == "Mouse":
@@ -12,9 +12,16 @@ def open(things):
         activate_mouse = True
         thread1 = threading.Thread(target=cameraMouse.CameraMouse)
         thread1.start()
-    elif things == "Tutorial" or things == "Guide":
-        thread2 = threading.Thread(target=tutorial.Tutorial)
-        thread2.start()
+    if things == "Tutorial":
+        from tutorial import Tutorial
+
+        global tutorial_active
+        tutorial_active = True
+        
+        tutorial = Tutorial()
+
+        thread_tutorial = threading.Thread(target=tutorial.run)
+        thread_tutorial.start()
     else:
         if things == "Browser":
             subprocess.Popen(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
@@ -31,3 +38,7 @@ def close(things):
             close("google chrome")
         elif things == "Notes" or things == "Notepad" or things == "Note":
             close("notepad")
+
+class OpenClose:
+    def __init__(self):
+        pass

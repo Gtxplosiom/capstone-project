@@ -1,3 +1,3 @@
-coordinates_list = [(100, 50), (200, 150), (300, 200)]
+import test
 
-print(coordinates_list[0])
+test.Vehicle

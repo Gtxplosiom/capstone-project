@@ -1,8 +1,10 @@
+## Classes
 import time
 
-tank_state = 100
-
 class Vehicle:
+
+    tank_state = 100
+
     def __init__(self, brand: str, type: str, color: str, wheels: int):
         self.brand = brand
         self.type = type
@@ -15,11 +17,10 @@ class Vehicle:
 
     def Run(self, state: bool):
         self.running = state
-        global tank_state
         while True:
-            if tank_state > 0:
+            if self.tank_state > 0:
                 print("Running")
-                tank_state = tank_state - 20
+                self.tank_state -= 20
                 time.sleep(1)
             else:
                 self.running = False
@@ -30,19 +31,18 @@ class Vehicle:
                     time.sleep(1)
                     print("Ready to refuel.")
                     time.sleep(1)
-                    break
+                    self.Refuel(True)
                 
 
     def Refuel(self, state: bool):
         refueling = state
-        global tank_state
-        if tank_state == 0:
+        if self.tank_state == 0:
             print("Refueling...")
             while refueling:
-                if tank_state < 100:
+                if self.tank_state < 100:
                     time.sleep(1)
-                    tank_state = tank_state + 20
-                    print(f"Tank Currently at {tank_state}%")
+                    self.tank_state += 20
+                    print(f"Tank Currently at {self.tank_state}%")
                 else:
                     print("Tank full, ready to drive...")
                     time.sleep(1)
@@ -53,9 +53,4 @@ class Vehicle:
 
 car = Vehicle('Toyota', 'Car', 'Red', 4)
 
-ready = True
-
-while ready:
-    car.Run(True)
-    car.Refuel(True)
-    
+car.Run(True)
