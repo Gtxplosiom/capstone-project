@@ -1,61 +1,37 @@
-import time
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QFont
 
-tank_state = 100
+class TutorialGUI:
+    def __init__(self):
 
-class Vehicle:
-    def __init__(self, brand: str, type: str, color: str, wheels: int):
-        self.brand = brand
-        self.type = type
-        self.color = color
-        self.wheels = wheels
+        self.app = QApplication([])
+
+        self.window = QWidget()
+        self.window.setGeometry(100, 100, 200, 300)
         
-    def Show_Specs(self):
-        self.string = f"These are the specs: Brand: {self.brand}, Type: {self.type}, Color: {self.color}, No. of wheels: {self.wheels}."
-        return self.string
+    def part_1(self):
+        layout = QVBoxLayout()
 
-    def Run(self, state: bool):
-        self.running = state
-        global tank_state
-        while True:
-            if tank_state > 0:
-                print("Running")
-                tank_state = tank_state - 20
-                time.sleep(1)
-            else:
-                self.running = False
-                if self.running == False:
-                    print("Car stopped.")
-                    time.sleep(1)
-                    print("Parking...")
-                    time.sleep(1)
-                    print("Ready to refuel.")
-                    time.sleep(1)
-                    break
-                
+        label = QLabel()
+        label.setText("Welcome to Tutorial!")
+        label.setFont(QFont("Arial", 16))
 
-    def Refuel(self, state: bool):
-        refueling = state
-        global tank_state
-        if tank_state == 0:
-            print("Refueling...")
-            while refueling:
-                if tank_state < 100:
-                    time.sleep(1)
-                    tank_state = tank_state + 20
-                    print(f"Tank Currently at {tank_state}%")
-                else:
-                    print("Tank full, ready to drive...")
-                    time.sleep(1)
-                    print("Going in the road...")
-                    time.sleep(1)
-                    break
+        label2 = QLabel()
+        label2.setText("I am here to guide you through this app")
+        label2.setFont(QFont("Arial", 16))
 
+        label3 = QLabel()
+        label3.setText("Say 'Next' to proceed")
+        label3.setFont(QFont("Arial", 16))
 
-car = Vehicle('Toyota', 'Car', 'Red', 4)
+        layout.addWidget(label)
+        layout.addWidget(label2)
+        layout.addWidget(label3)
 
-ready = True
+        self.window.setLayout(layout)
 
-while ready:
-    car.Run(True)
-    car.Refuel(True)
-    
+        self.window.show()
+        self.app.exec_()
+
+gui = TutorialGUI()
+gui.part_1()

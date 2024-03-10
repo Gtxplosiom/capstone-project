@@ -74,3 +74,5 @@ def CameraMouse():
             cap.release()
             cv2.destroyAllWindows()
             break
+
+CameraMouse()

@@ -1,3 +1,3 @@
-import test
+import draft
 
-test.Vehicle
+draft.Vehicle

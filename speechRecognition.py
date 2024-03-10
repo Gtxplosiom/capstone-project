@@ -38,8 +38,7 @@ class SpeechRecognitionWhisper:
     
     def Listening(self):
         with self.microphone as self.source:
-            self.recognizer.energy_threshold = 200
-            self.recognizer.dynamic_energy_threshold = False
+            self.recognizer.adjust_for_ambient_noise(self.source)
 
             print("Listening...")
             while True:
@@ -48,6 +47,8 @@ class SpeechRecognitionWhisper:
 
                     print("Using Google Chrome")
                     try:
+                        self.recognizer.adjust_for_ambient_noise(self.source)
+                        print(self.recognizer.energy_threshold)
                         audio = self.recognizer.listen(self.source, timeout=5)
 
                         with tempfile.NamedTemporaryFile(delete=False) as temp_audio:
@@ -80,6 +81,8 @@ class SpeechRecognitionWhisper:
                 elif openThings.tutorial_active:
                     print("In Tutorial")
                     try:
+                        self.recognizer.adjust_for_ambient_noise(self.source)
+                        print(self.recognizer.energy_threshold)
                         audio = self.recognizer.listen(self.source, timeout=5)
 
                         with tempfile.NamedTemporaryFile(delete=False) as temp_audio:
@@ -113,6 +116,8 @@ class SpeechRecognitionWhisper:
 
                     print("Not using specified programs")
                     try:
+                        self.recognizer.adjust_for_ambient_noise(self.source)
+                        print(self.recognizer.energy_threshold)
                         audio = self.recognizer.listen(self.source, timeout=5)
 
                         with tempfile.NamedTemporaryFile(delete=False) as temp_audio:
