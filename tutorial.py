@@ -40,19 +40,41 @@ class TutorialSR:
 
         return text
     
+    # Page segmentation modes: for OCR
+    # 0    Orientation and script detection (OSD) only.
+    # 1    Automatic page segmentation with OSD.
+    # 2    Automatic page segmentation, but no OSD, or OCR.
+    # 3    Fully automatic page segmentation, but no OSD. (Default)
+    # 4    Assume a single column of text of variable sizes.
+    # 5    Assume a single uniform block of vertically aligned text.
+    # 6    Assume a single uniform block of text.
+    # 7    Treat the image as a single text line.
+    # 8    Treat the image as a single word.
+    # 9    Treat the image as a single word in a circle.
+    # 10    Treat the image as a single character.
+    # 11    Sparse text. Find as much text as possible in no particular order.
+    # 12    Sparse text with OSD.
+    # 13    Raw line. Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+    
     @staticmethod
     def HighlightTk(text: str, lang='eng'):
         screenshot = pyautogui.screenshot()
-        img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
 
-        data = pytesseract.image_to_data(img, lang=lang, output_type='data.frame')
+        img_gray = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
+
+        psm_num = 11 # adjust page segmentation mode for better extraction of text depending on your image
+        custom_config = f'--oem 3 --psm {psm_num}'
+        data = pytesseract.image_to_data(img_gray, config=custom_config, lang=lang, output_type='data.frame')
+
         text = text.lower()
         print(text)
+        min_conf = 85
 
         try:
+            data = data[(data['text'] == text) & (data['conf'] >= min_conf)]
             x, y = data[data['text'] == text]['left'].iloc[0], data[data['text'] == text]['top'].iloc[0]
             # Filter rows in DataFrame where text is equal to text
-            item_instances = data[data['text'].str.lower() == text]
+            item_instances = data[data['text'] == text]
 
             num_items = len(item_instances)
 
@@ -114,7 +136,9 @@ class TutorialSR:
                             if CameraMouse.mouse_is_active:
                                 self.tutorial.add_text("Close mouse first.")
                             else:
-                                self.tutorial.next_part()
+                                self.tutorial.next_part(1)
+                        if command == "skip":
+                            self.tutorial.next_part(7)
                         elif command == "open":
                             if len(text) > 1:
                                 command2 = text[1]
@@ -133,7 +157,6 @@ class TutorialSR:
                                 if command2 == "mouse":
                                     self.mouse.mouse_is_active = False
                         elif command == "click":
-                            print(text)
                             if len(text) > 1:
                                 command2 = text[1]
                                 for x in self.symbols:
@@ -208,8 +231,8 @@ class Tutorial:
         else:
             pass
 
-    def next_part(self):
-        self.current_part += 1
+    def next_part(self, num: int):
+        self.current_part += num
 
         self.clear_widgets(0)
 
@@ -281,12 +304,14 @@ class Tutorial:
     def part_8(self):
         self.label = tk.Label(self.root, text="Alternatively, when the mouse is disabled, you can directly click \n something on the screen by saying 'Click' first then \n saying the word associated with what you wanted to click. \n Try clicking the two buttons on the screen.", font=("Arial", 16))
         self.label.pack(pady=20)
-        self.delayed_text(5, "Hint: Say 'Click green' or 'Click blue'.")
-        self.button1 = tk.Button(self.root, command=lambda: self.change_color(self.root, "green"), width=30, height=15)
-        self.button1.configure(text="Green", font=("Arial", 20))
-        self.button1.pack(pady=1)
-        self.button2 = tk.Button(self.root, text="blue", command=lambda: self.change_color(self.root, "blue"), width=30, height=15)
-        self.button2.pack()
+
+        self.button1 = tk.Button(self.root, command=lambda: self.change_color(self.root, "green"), width=20, height=10)
+        self.button1.configure(text="green", font=("Arial", 15), bg="white")
+        self.button1.pack(side="left", padx=10)
+
+        self.button2 = tk.Button(self.root, command=lambda: self.change_color(self.root, "blue"), width=20, height=10)
+        self.button2.configure(text="blue", font=("Arial", 15), bg="white")
+        self.button2.pack(side="left")
         
 class CameraMouse():
     mouse_is_active = False
