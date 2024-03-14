@@ -12,6 +12,8 @@ import pyautogui
 import numpy as np
 import pytesseract
 
+import selenium
+
 class TutorialSR:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     curr_dir = script_dir.replace('\\', '/')
@@ -122,7 +124,7 @@ class TutorialSR:
             print(num_items)
 
             if num_items > 1:
-                root = tk.Tk()
+                root = tk.Toplevel()
                 root.attributes('-alpha', 0.5)
                 root.attributes('-fullscreen', True)
 
@@ -145,8 +147,6 @@ class TutorialSR:
                     canvas.create_text(label_x, label_y, text=str(idx), fill='white')
                 
                 root.after(5000, root.destroy)
-
-                root.mainloop()
             else:
                 pyautogui.click(x, y)
 
@@ -235,6 +235,7 @@ class Tutorial:
         self.center_window(self.root, 800, 400)
 
         self.listen_window = tk.Toplevel()
+        self.listen_window.wm_attributes('-toolwindow', 'true')
         self.listen_window.title("Check if listening or processing audio")
         self.listen_window.geometry("400x200+1500+700")
 
@@ -254,7 +255,6 @@ class Tutorial:
 
         self.button1 = tk.Button(self.root)
         self.button2 = tk.Button(self.root)
-        
 
         self.current_part = 1
 
@@ -414,8 +414,6 @@ class Tutorial:
 
         time.sleep(5)
 
-        
-
     def part_10(self):
         pass
         
@@ -496,6 +494,7 @@ class CameraMouse():
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.wm_attributes('-topmost', 'true')
     app = Tutorial(root)
 
     root.mainloop()
