@@ -1,1 +1,1 @@
-fix OCR
+implement wake word
