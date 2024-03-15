@@ -1,3 +1,4 @@
 implement wake word
-integrate selenium
+learn selenium
 finish file manager simulation
+animate GUI

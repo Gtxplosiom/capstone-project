@@ -1,10 +1,11 @@
 import tkinter as tk
 import os
+from PIL import Image
 
 class Window:
     def __init__(self, root):
         self.root = root
-        self.root.geometry('1000x580')
+        self.root.geometry('10x10+1500+500')
 
         self.fm_icon = tk.PhotoImage(file='media/icons/fmicon.png')
         self.close_icon = tk.PhotoImage(file='media/icons/close.png')
@@ -19,7 +20,7 @@ class Window:
 
     def file_manager(self):
         fm_root = tk.Toplevel()
-        fm_root.wm_attributes('-topmost', True)
+        # fm_root.wm_attributes('-topmost', True)
         fm_root.overrideredirect(True)
         fm_root.configure(bg='#FFFFFF')
 
@@ -73,8 +74,59 @@ class Window:
         self.click_count += 1
         self.root.after(200, self.reset_clicks)
         if self.click_count == 2:
-            print(f"clicked by {button}")
+            print(f'clicked by {button}')
+            if button == 'folder_button':
+                self.open_folder()
+            elif button == 'photo_button':
+                self.open_photo()
+            elif button == 'video_button':
+                self.open_video()
+            elif button == 'app_button':
+                self.open_app()
+
             self.reset_clicks()
+
+    def open_folder(self):
+        folder = tk.Toplevel()
+        folder.wm_attributes('-topmost', True)
+        folder.configure(bg='#FFFFFF')
+
+        top_part = tk.Frame(folder, bg='#FFFFFF', width=1000, height=156)
+        top_part.pack(side='top')
+
+        bottom_part = tk.Frame(folder, bg='#FFFFFF', width=1000, height=424)
+        bottom_part.pack(side='bottom')
+
+        header_1 = tk.Frame(top_part, bg='#E9E9E9', width=239, height=100)
+        header_1.place(x=5, y=6)
+        title = tk.Label(header_1, text="File", bg='#E9E9E9')
+        title.place(x=52, y=15)
+
+        fm_logo = tk.Label(header_1, image=self.fm_icon, bg='#E9E9E9')
+        fm_logo.place(x=10, y=10)
+
+        header_2 = tk.Frame(top_part, bg='#E9E9E9', width=1000, height=580)
+        header_2.place(x=0, y=56)
+
+        close_button = tk.Button(top_part, image=self.close_icon, bg='#FFFFFF', bd=0, command=lambda: self.close_window(folder))
+        close_button.place(x=956, y=14)
+
+    def open_photo(self):
+        img = Image.open('media/Facebook.png')
+        img.show()
+
+    def open_video(self):
+        vid = Image.open('media/sample_vid.gif')
+        vid.show()
+
+    def open_app(self):
+        app = tk.Toplevel()
+        app.wm_attributes('-topmost', True)
+        app.configure(bg='#FFFFFF')
+        app.geometry('800x500')
+
+        app_label = tk.Label(app, text="This app is currently running...")
+        app_label.pack()
 
 if __name__ == '__main__':
     root = tk.Tk()

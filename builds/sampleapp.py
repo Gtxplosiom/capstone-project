@@ -62,26 +62,14 @@ class WhisperASR:
 
 class WindowASR:
     def __init__(self, root):
-        self.curr_frame = 0
-        self.colors = {'Rich black': '#031926', 'Teal': '#468189', 'Cambridge blue': '#77ACA2', 'Ash gray': '#9DBEBB', 'Parchment': '#F4E9CD', }
-
         self.root = root
-
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
-
-        self.root_width = 400
-        self.root_height = 200
-
         self.root.title("Sample App")
-        self.root.geometry(f"{self.root_width}x{self.root_height}+{self.screen_width - 400}+700")
-        self.root.overrideredirect(True)
-        self.root.configure(bg=self.colors['Rich black'])
+        self.root.geometry("400x200+1500+700")
 
-        self.state_label = tk.Label(self.root, text="checking state...", font=('arial', 12), fg=self.colors['Parchment'], bg=self.colors['Rich black'])
+        self.state_label = tk.Label(self.root, text="checking state...")
         self.state_label.pack(pady=20)
 
-        self.result_label = tk.Label(self.root, text="waiting for result...", font=('arial', 12), fg=self.colors['Parchment'], bg=self.colors['Rich black'])
+        self.result_label = tk.Label(self.root, text="waiting for result...")
         self.result_label.pack(pady=20)
 
         self.app_asr = WhisperASR(self)
@@ -91,8 +79,6 @@ class WindowASR:
 
         thread_check = Thread(target=lambda: self.app_asr.check_listen(WhisperASR.is_listening))
         thread_check.start()
-
-        self.root.after(5000, self.animate)
 
     def exit_program(self, e):
         if e.name == 'esc':
@@ -107,17 +93,6 @@ class WindowASR:
     def show_result(self, result):
         self.result_label.configure(text=result)
         self.result_label.pack(pady=20)
-
-    def animate(self):
-        print("animating")
-        max_frames = 7
-        self.curr_frame += 1
-
-        self.root.geometry(f"{self.root_width - 50}x{self.root_height}+{self.screen_width - self.root_width}+700")
-
-        if self.curr_frame != max_frames:
-            self.root.after(100, self.animate)
-
 
 if __name__ == "__main__":
     root = tk.Tk()

@@ -5,6 +5,7 @@ import time
 import whisper
 import speech_recognition as sr
 import keyboard
+from PIL import Image
 
 import cv2
 import dlib
@@ -12,7 +13,6 @@ import pyautogui
 import numpy as np
 import pytesseract
 
-from pathlib import Path
 import selenium
 
 class TutorialSR:
@@ -269,6 +269,8 @@ class Tutorial:
 
         self.current_part = 1
 
+        self.part_10()
+
         pytesseract.pytesseract.tesseract_cmd = (r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\tesseractOCR\tesseract.exe") # needed for Windows as OS
 
         tsr = TutorialSR(self)
@@ -319,11 +321,20 @@ class Tutorial:
     def reset_clicks(self):
         self.click_count = 0
 
-    def double_click(self):
+    def double_click(self, button):
         self.click_count += 1
         self.root.after(200, self.reset_clicks)
         if self.click_count == 2:
-            print("do something")
+            print(f'clicked by {button}')
+            if button == 'folder_button':
+                self.open_folder()
+            elif button == 'photo_button':
+                self.open_photo()
+            elif button == 'video_button':
+                self.open_video()
+            elif button == 'app_button':
+                self.open_app()
+
             self.reset_clicks()
 
     def next_part(self):
@@ -352,7 +363,7 @@ class Tutorial:
 
     def file_manager(self):
         fm_root = tk.Toplevel()
-        fm_root.wm_attributes('-topmost', True)
+        # fm_root.wm_attributes('-topmost', True)
         fm_root.overrideredirect(True)
         fm_root.configure(bg='#FFFFFF')
 
@@ -376,25 +387,73 @@ class Tutorial:
         close_button = tk.Button(top_part, image=self.close_icon, bg='#FFFFFF', bd=0, command=lambda: self.close_window(fm_root))
         close_button.place(x=956, y=14)
 
-        folder_button = tk.Button(bottom_part, image=self.folder_icon, bg='#FFFFFF', bd=0)
+        folder_button = tk.Button(bottom_part, image=self.folder_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("folder_button"))
         folder_button.place(x=75, y=50)
         folder_text = tk.Label(bottom_part, text="File", font=('arial', 12), bg='#FFFFFF')
         folder_text.place(x=108, y=145)
 
-        photo_button = tk.Button(bottom_part, image=self.image_icon, bg='#FFFFFF', bd=0)
+        photo_button = tk.Button(bottom_part, image=self.image_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("photo_button"))
         photo_button.place(x=263, y=50)
         photo_text = tk.Label(bottom_part, text="Photo", font=('arial', 12), bg='#FFFFFF')
         photo_text.place(x=290, y=145)
 
-        video_button = tk.Button(bottom_part, image=self.mp4_icon, bg='#FFFFFF', bd=0)
+        video_button = tk.Button(bottom_part, image=self.mp4_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("video_button"))
         video_button.place(x=451, y=50)
         video_text = tk.Label(bottom_part, text="Video", font=('arial', 12), bg='#FFFFFF')
         video_text.place(x=473, y=145)
 
-        app_button = tk.Button(bottom_part, image=self.windows_app_icon, bg='#FFFFFF', bd=0)
+        app_button = tk.Button(bottom_part, image=self.windows_app_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("app_button"))
         app_button.place(x=630, y=50)
         app_text = tk.Label(bottom_part, text="Application", font=('arial', 12), bg='#FFFFFF')
         app_text.place(x=635, y=145)
+
+        def show_next():
+            label = tk.Label(bottom_part, text='Say "Next" if you are done.', font=('arial', 16), bg='#FFFFFF')
+            label.place(x=350, y=250)
+
+        self.root.after(30000, show_next)
+
+    def open_folder(self):
+        folder = tk.Toplevel()
+        folder.wm_attributes('-topmost', True)
+        folder.configure(bg='#FFFFFF')
+
+        top_part = tk.Frame(folder, bg='#FFFFFF', width=1000, height=156)
+        top_part.pack(side='top')
+
+        bottom_part = tk.Frame(folder, bg='#FFFFFF', width=1000, height=424)
+        bottom_part.pack(side='bottom')
+
+        header_1 = tk.Frame(top_part, bg='#E9E9E9', width=239, height=100)
+        header_1.place(x=5, y=6)
+        title = tk.Label(header_1, text="File", bg='#E9E9E9')
+        title.place(x=52, y=15)
+
+        fm_logo = tk.Label(header_1, image=self.fm_icon, bg='#E9E9E9')
+        fm_logo.place(x=10, y=10)
+
+        header_2 = tk.Frame(top_part, bg='#E9E9E9', width=1000, height=580)
+        header_2.place(x=0, y=56)
+
+        close_button = tk.Button(top_part, image=self.close_icon, bg='#FFFFFF', bd=0, command=lambda: self.close_window(folder))
+        close_button.place(x=956, y=14)
+
+    def open_photo(self):
+        img = Image.open('media/Facebook.png')
+        img.show()
+
+    def open_video(self):
+        vid = Image.open('media/sample_vid.gif')
+        vid.show()
+
+    def open_app(self):
+        app = tk.Toplevel()
+        app.wm_attributes('-topmost', True)
+        app.configure(bg='#FFFFFF')
+        app.geometry('800x500')
+
+        app_label = tk.Label(app, text="This app is currently running...")
+        app_label.pack()
     
     def part_2(self):
         self.label.configure(text="This app makes use of camera for mouse movements.", font=("Arial", 16))
@@ -556,7 +615,7 @@ class CameraMouse():
                 cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
                 cv2.circle(flipped_frame, (xx, yy), 3, (255, 0, 0), -1)
 
-            cv2.imshow('Frame', flipped_frame)
+            cv2.imshow('Preview', flipped_frame)
 
             key = cv2.waitKey(1)
 

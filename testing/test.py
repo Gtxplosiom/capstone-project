@@ -1,17 +1,33 @@
 import tkinter as tk
 
-def after_callback():
-    print("Delayed function called after button click")
+def animate():
+    max_frames = 7
 
-def button_click():
-    print("Button clicked")
-    # Schedule after_callback to be called after 1000 milliseconds (1 second)
-    root.after(1000, after_callback)
+    global curr_frame
+    curr_frame += 1
+
+    global curr_x, curr_y
+    curr_x += 50
+    curr_y += 50
+
+    button.place(curr_x, curr_y)
+
+    if curr_frame != max_frames:
+        root.after(1000, animate)
+
+curr_frame = 0
+
+curr_x = 0
+curr_y = 0
 
 root = tk.Tk()
+root_width = 800
+root_height = 500
+root.geometry(f"{root_width}x{root_height}")
 
-# Create a button
-button = tk.Button(root, text="Click me", command=button_click)
-button.pack()
+button = tk.Button(root, text="Hello")
+button.place(x=curr_x, y=curr_y)
+
+root.after(3000, animate)
 
 root.mainloop()
