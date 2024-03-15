@@ -21,7 +21,6 @@ window.wm_attributes('-toolwindow', 'true')
 window.geometry("1000x580")
 window.configure(bg = "#FFFFFF")
 
-
 canvas = Canvas(
     window,
     bg = "#FFFFFF",

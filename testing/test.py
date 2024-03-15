@@ -1,18 +1,17 @@
-class Yehey:
-    check = 0
-    def __init__(self):
-        pass
+import tkinter as tk
 
-class Yoohoo:
-    def __init__(self):
-        pass
-    def update(self):
-        Yehey.check = 1
+def after_callback():
+    print("Delayed function called after button click")
 
-yoohoo = Yoohoo()
-yehey = Yehey()
+def button_click():
+    print("Button clicked")
+    # Schedule after_callback to be called after 1000 milliseconds (1 second)
+    root.after(1000, after_callback)
 
-yoohoo.update()
+root = tk.Tk()
 
-print(Yehey.check)
-print(yehey.check)
+# Create a button
+button = tk.Button(root, text="Click me", command=button_click)
+button.pack()
+
+root.mainloop()
