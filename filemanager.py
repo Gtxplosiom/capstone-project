@@ -43,22 +43,22 @@ class Window:
         close_button = tk.Button(top_part, image=self.close_icon, bg='#FFFFFF', bd=0, command=lambda: self.close_window(fm_root))
         close_button.place(x=956, y=14)
 
-        folder_button = tk.Button(bottom_part, image=self.folder_icon, bg='#FFFFFF', bd=0, command=self.double_click)
+        folder_button = tk.Button(bottom_part, image=self.folder_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("folder_button"))
         folder_button.place(x=75, y=50)
         folder_text = tk.Label(bottom_part, text="File", font=('arial', 12), bg='#FFFFFF')
         folder_text.place(x=108, y=145)
 
-        photo_button = tk.Button(bottom_part, image=self.image_icon, bg='#FFFFFF', bd=0, command=self.double_click)
+        photo_button = tk.Button(bottom_part, image=self.image_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("photo_button"))
         photo_button.place(x=263, y=50)
         photo_text = tk.Label(bottom_part, text="Photo", font=('arial', 12), bg='#FFFFFF')
         photo_text.place(x=290, y=145)
 
-        video_button = tk.Button(bottom_part, image=self.mp4_icon, bg='#FFFFFF', bd=0, command=self.double_click)
+        video_button = tk.Button(bottom_part, image=self.mp4_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("video_button"))
         video_button.place(x=451, y=50)
         video_text = tk.Label(bottom_part, text="Video", font=('arial', 12), bg='#FFFFFF')
         video_text.place(x=473, y=145)
 
-        app_button = tk.Button(bottom_part, image=self.windows_app_icon, bg='#FFFFFF', bd=0, command=self.double_click)
+        app_button = tk.Button(bottom_part, image=self.windows_app_icon, bg='#FFFFFF', bd=0, command=lambda: self.double_click("app_button"))
         app_button.place(x=630, y=50)
         app_text = tk.Label(bottom_part, text="Application", font=('arial', 12), bg='#FFFFFF')
         app_text.place(x=635, y=145)
@@ -69,11 +69,11 @@ class Window:
     def reset_clicks(self):
         self.click_count = 0
 
-    def double_click(self):
+    def double_click(self, button):
         self.click_count += 1
         self.root.after(200, self.reset_clicks)
         if self.click_count == 2:
-            print("do something")
+            print(f"clicked by {button}")
             self.reset_clicks()
 
 if __name__ == '__main__':
