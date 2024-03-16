@@ -18,6 +18,8 @@ class WhisperASR:
     def __init__(self, window_asr):
         self.window_asr = window_asr
 
+        # tiny_model_path = os.path.expanduser('D:/Capstone/Capstone-Application/models/tiny.en.pt')
+
         self.model = whisper.load_model(self.tiny_model_path)
         self.mic = sr.Microphone()
         self.recognizer = sr.Recognizer()

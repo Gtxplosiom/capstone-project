@@ -18,7 +18,7 @@ import selenium
 class TutorialSR:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     curr_dir = script_dir.replace('\\', '/')
-    tiny_model_path = os.path.expanduser(f'{script_dir}/models/tiny.en.pt')
+    tiny_model_path = os.path.expanduser(f'{curr_dir}/models/tiny.en.pt')
 
     is_listening = True
     def __init__(self, tutorial):
@@ -40,7 +40,7 @@ class TutorialSR:
 
     def transcribe_to_text(self, model):
         try:
-            result = model.transcribe('speech.wav')
+            result = model.transcribe('speech.wav', fp16=False)
 
             text = result['text']
             text = text.lower()
@@ -165,6 +165,7 @@ class TutorialSR:
                 self.is_listening = True
 
                 self.r.adjust_for_ambient_noise(source)
+
                 try:
                     audio = self.r.listen(source)
 
@@ -178,7 +179,6 @@ class TutorialSR:
                         command = text[0]
                         for x in self.symbols:
                             command = command.replace(x, '')
-                        print(command)
 
                         if command == "next":
                             self.tutorial.next_part()
@@ -210,8 +210,6 @@ class TutorialSR:
 
                                 command2 = self.capitalize_word(command2)
 
-                                print(command2)
-
                                 self.HighlightTk(command2)
                             else:
                                 pyautogui.click()
@@ -230,26 +228,45 @@ class TutorialSR:
                     print(f"Error with the API request; {e}")
 
 class Tutorial:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    tesseract_path = os.path.expanduser(f'{script_dir}\\tesseractOCR\\tesseract.exe')
+
+    colors = {'Rich black': '#031926', 'Teal': '#468189', 'Cambridge blue': '#77ACA2', 'Ash gray': '#9DBEBB', 'Parchment': '#F4E9CD', }
+    
     def __init__(self, root):
+        pytesseract.pytesseract.tesseract_cmd = (self.tesseract_path) # needed for Windows as OS
+
         self.root = root
         self.root.title("Tutorial Window")
+        self.root.configure(bg=self.colors['Teal'])
         self.center_window(self.root, 800, 400)
 
-        self.listen_window = tk.Toplevel()
-        self.listen_window.wm_attributes('-toolwindow', 'true')
-        self.listen_window.title("Check if listening or processing audio")
-        self.listen_window.geometry("400x200+1500+700")
+        self.screen_width = self.root.winfo_screenwidth()
+        self.screen_height = self.root.winfo_screenheight()
 
-        self.label = tk.Label(self.root, text="Welcome to the Tutorial!", font=("Arial", 16))
+        self.listen_window = tk.Toplevel()
+        self.listen_window.overrideredirect(True)
+        self.listen_window.wm_attributes('-topmost', True)
+        self.listen_window.title("Check if listening or processing audio")
+        self.listen_window.configure(bg=self.colors['Teal'])
+
+        self.lw_width = 400
+        self.lw_height = 200
+        self.x_position = self.screen_width - self.lw_width
+        self.y_position = 700
+
+        self.listen_window.geometry(f"{self.lw_width}x{self.lw_height}+{self.x_position}+{self.y_position}")
+
+        self.label = tk.Label(self.root, text="Welcome to the Tutorial!", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
         self.label.pack(pady=20)
 
-        self.label2 = tk.Label(self.root, text="Say 'Next' to proceed", font=("Arial", 16))
+        self.label2 = tk.Label(self.root, text="Say 'Next' to proceed", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
         self.label2.pack(pady=20)
 
-        self.label3 = tk.Label(self.root, text="", font=("Arial", 16))
-        self.label4 = tk.Label(self.root, text="", font=("Arial", 16))
+        self.label3 = tk.Label(self.root, text="", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
+        self.label4 = tk.Label(self.root, text="", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
 
-        self.listen_label = tk.Label(self.listen_window, text="not checking mic...", font=("Arial", 16))
+        self.listen_label = tk.Label(self.listen_window, text="not checking mic...", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
         self.listen_label.pack(pady=20)
 
         self.other_label = tk.Label(self.root)
@@ -268,10 +285,6 @@ class Tutorial:
         self.click_count = 0
 
         self.current_part = 1
-
-        self.part_10()
-
-        pytesseract.pytesseract.tesseract_cmd = (r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\tesseractOCR\tesseract.exe") # needed for Windows as OS
 
         tsr = TutorialSR(self)
         threadsr = Thread(target=tsr.sr_tutorial)
@@ -295,18 +308,30 @@ class Tutorial:
             widget.pack_forget()
 
     def add_text(self, string: str):
-        self.other_label.configure(text=f"{string}", font=("Arial", 16))
+        self.other_label.configure(text=f"{string}", font=("Arial", 16), fg=self.colors['Parchment'], bg=self.colors['Teal'])
         self.other_label.pack(pady=20)
 
     def delayed_text(self, num: int, text: str):
         time.sleep(num)
         self.add_text(f"{text}")
 
+    def label_color(self, fg_color, bg_color):
+        self.label.configure(fg=fg_color, bg=bg_color)
+        self.label2.configure(fg=fg_color, bg=bg_color)
+        self.label3.configure(fg=fg_color, bg=bg_color)
+        self.label4.configure(fg=fg_color, bg=bg_color)
+
+        self.other_label.configure(fg=fg_color, bg=bg_color)
+
     def change_color(self, what: object, color: str):
         what.configure(bg=color)
 
+        self.label_color(self.colors['Parchment'], color)
+
     def change_color_next(self, what: object, color: str):
         what.configure(bg=color)
+
+        self.label_color(self.colors['Rich black'], color)
 
         current_color = what.cget("bg")
 
@@ -359,12 +384,14 @@ class Tutorial:
         elif self.current_part == 10:
             self.part_10()
         else:
-            print("Part doesn't exist.")
+            self.current_part -= 1
+            print("Part does not exist.")
 
     def file_manager(self):
         fm_root = tk.Toplevel()
-        # fm_root.wm_attributes('-topmost', True)
+        fm_root.wm_attributes('-topmost', True)
         fm_root.overrideredirect(True)
+        fm_root.geometry('1000x580+50+200')
         fm_root.configure(bg='#FFFFFF')
 
         top_part = tk.Frame(fm_root, bg='#FFFFFF', width=1000, height=156)
@@ -514,7 +541,8 @@ class Tutorial:
 
         self.label.configure(text="You can close the camera controlled mouse by saying 'Close mouse' command. \n \n Try it right now.", font=("Arial", 16))
 
-        self.delayed_text(5, "Say 'Next' to continue.")
+        thread_dt = Thread(target=self.delayed_text, args=(5, "Say 'Next' to continue."))
+        thread_dt.start()
 
     def part_8(self):
         self.other_label.pack_forget()
@@ -535,6 +563,9 @@ class Tutorial:
         self.button1.pack_forget()
         self.button2.pack_forget()
 
+        self.root.configure(bg=self.colors['Teal'])
+        self.label_color(self.colors['Parchment'], self.colors['Teal'])
+
         self.label.configure(text="Moving on, let us try the 'Double-click' command.")
 
         time.sleep(3)
@@ -547,6 +578,7 @@ class Tutorial:
 
     def part_10(self):
         self.label.pack_forget()
+        self.root.geometry('800x400+1100+200')
 
         self.file_manager()
         

@@ -1,3 +1,5 @@
+## multiple commands
+
 def multi_command(string: str):
     keywords = ['Open', 'Close', 'Search']
 
@@ -38,3 +40,5 @@ def multi_command(string: str):
 sample_string = 'I am Gtxplosion and I want to Open browser and Search one piece is the best of all time ever Open link'
 
 multi_command(sample_string)
+
+## next pending
