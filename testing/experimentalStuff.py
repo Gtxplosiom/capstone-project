@@ -13,8 +13,6 @@ def process_commands(string: str):
             word_index = words.index(word)
             command_index = keywords.index(word)
 
-            # print(f'This word is in keywords list: {word}, its index is {word_index}. The word in keywords is located in index: {command_index}')
-
             if word == 'Search':
                 query = words[word_index + 1:]
 
@@ -22,7 +20,7 @@ def process_commands(string: str):
                     if x in keywords:
                         exclude_index = query.index(x)
 
-                query = query[:exclude_index] # omit the keyword found and the rest of the text that follows it
+                query = query[:exclude_index]      # omit the keyword found and the rest of the text that follows it
 
                 query = ' '.join(query)
 
