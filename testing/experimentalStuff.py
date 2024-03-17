@@ -1,6 +1,7 @@
-## multiple commands
+def execute(command):
+    print(command)
 
-def multi_command(string: str):
+def process_commands(string: str):
     keywords = ['Open', 'Close', 'Search']
 
     commands = []
@@ -35,10 +36,11 @@ def multi_command(string: str):
 
             commands.append(command)
 
-    print(commands)
+    for command in commands:
+        execute(command)
 
 sample_string = 'I am Gtxplosion and I want to Open browser and Search one piece is the best of all time ever Open link'
 
-multi_command(sample_string)
+process_commands(sample_string)
 
 ## next pending

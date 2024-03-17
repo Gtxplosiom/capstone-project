@@ -1,4 +1,1 @@
-implement wake word
-learn selenium
 finish file manager simulation
-animate GUI

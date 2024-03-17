@@ -13,7 +13,10 @@ import pyautogui
 import numpy as np
 import pytesseract
 
-import selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 class TutorialSR:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -31,6 +34,7 @@ class TutorialSR:
         self.in_tutorial = True
 
         self.mouse = CameraMouse()
+        self.browser = BrowserStuff()
 
         self.symbols = ['!', ',', '.', '?']
 
@@ -83,22 +87,38 @@ class TutorialSR:
                 self.tutorial.listen_label.config(text="Listening...")
             else:
                 self.tutorial.listen_label.config(text="Processing audio")
-    
-    # Page segmentation modes: for OCR
-    # 0    Orientation and script detection (OSD) only.
-    # 1    Automatic page segmentation with OSD.
-    # 2    Automatic page segmentation, but no OSD, or OCR.
-    # 3    Fully automatic page segmentation, but no OSD. (Default)
-    # 4    Assume a single column of text of variable sizes.
-    # 5    Assume a single uniform block of vertically aligned text.
-    # 6    Assume a single uniform block of text.
-    # 7    Treat the image as a single text line.
-    # 8    Treat the image as a single word.
-    # 9    Treat the image as a single word in a circle.
-    # 10    Treat the image as a single character.
-    # 11    Sparse text. Find as much text as possible in no particular order.
-    # 12    Sparse text with OSD.
-    # 13    Raw line. Treat the image as a single text line, bypassing hacks that are Tesseract-specific.
+
+    def execute_in_browser(self, asr_string: str):
+        split_string = asr_string.split()
+
+        if len(split_string) > 0:
+
+            command = split_string[0]
+            command = command.capitalize()
+            for x in self.symbols:
+                command = command.replace(x, '')
+
+            query = split_string[1:]
+            query = ' '.join(query)
+            for x in self.symbols:
+                query = query.replace(x, '')
+
+            print(command)
+            print(query)
+
+            if command == 'Open' and query == 'browser':
+                self.browser.open_browser()
+            elif command == "Exit" and query == 'browser':
+                self.browser.browser_is_active = False
+                self.browser.close_browser()
+            elif command == 'Search':
+                self.browser.search(query)
+            elif command == 'Scroll':
+                self.browser.scroll(query, 500)
+            else:
+                pass
+        else:
+            pass
     
     @staticmethod
     def HighlightTk(text: str, lang='eng'):
@@ -160,72 +180,123 @@ class TutorialSR:
     def sr_tutorial(self):
         while self.in_tutorial:
             with self.mic as source:
+                if self.browser.browser_is_active:
+                    print("Listening. In browser...")
+                    self.is_listening = True
 
-                print("Listening. In tutorial...")
-                self.is_listening = True
+                    self.r.adjust_for_ambient_noise(source)
 
-                self.r.adjust_for_ambient_noise(source)
+                    try:
+                        audio = self.r.listen(source)
 
-                try:
-                    audio = self.r.listen(source)
+                        self.is_listening = False
 
-                    self.is_listening = False
+                        self.audio_to_wav(audio)
 
-                    self.audio_to_wav(audio)
+                        text = self.transcribe_to_text(self.tiny_model)
 
-                    text = self.transcribe_to_text(self.tiny_model)
+                        text = ' '.join(text)
 
-                    if len(text) > 0:
-                        command = text[0]
-                        for x in self.symbols:
-                            command = command.replace(x, '')
+                        self.execute_in_browser(text)
 
-                        if command == "next":
-                            self.tutorial.next_part()
-                        if command == "forward":
-                            self.tutorial.part_8()
-                        elif command == "open":
-                            if len(text) > 1:
-                                command2 = text[1]
-                                for x in self.symbols:
-                                    command2 = command2.replace(x, '')
-                                if command2 == "mouse":
-                                    self.tutorial.add_text("Opening mouse. Wait for a sec...")
-                                    self.tutorial.add_text("Say 'Next' to proceed.")
-                                    thread_mouse = Thread(target=self.mouse.run_mouse)
-                                    thread_mouse.start()
-                        elif command == "close":
-                            if len(text) > 1:
-                                command2 = text[1]
-                                for x in self.symbols:
-                                    command2 = command2.replace(x, '')
-                                if command2 == "mouse":
-                                    self.mouse.mouse_is_active = False
-                        elif command == "click":
-                            if len(text) > 1:
-                                command2 = text[1]
+                        os.remove('speech.wav')
 
-                                for x in self.symbols:
-                                    command2 = command2.replace(x, '')
+                    except sr.WaitTimeoutError:
+                        print("Listening timed out. No audio detected.")
+                    except sr.UnknownValueError:
+                        print("Could not understand audio.")
+                    except sr.RequestError as e:
+                        print(f"Error with the API request; {e}")
+                else:
+                    print("Listening. In tutorial...")
+                    self.is_listening = True
 
-                                command2 = self.capitalize_word(command2)
+                    self.r.adjust_for_ambient_noise(source)
 
-                                self.HighlightTk(command2)
+                    try:
+                        audio = self.r.listen(source)
+
+                        self.is_listening = False
+
+                        self.audio_to_wav(audio)
+
+                        text = self.transcribe_to_text(self.tiny_model)
+
+                        print(text)
+
+                        if len(text) > 0:
+                            command = text[0]
+                            for x in self.symbols:
+                                command = command.replace(x, '')
+
+                            if command == "next":
+                                self.tutorial.next_part()
+                            if command == "forward":
+                                self.tutorial.part_8()
+                            elif command == "open":
+                                if len(text) > 1:
+                                    command2 = text[1]
+
+                                    for x in self.symbols:
+                                        command2 = command2.replace(x, '')
+
+                                    if command2 == "mouse":
+                                        self.tutorial.add_text("Opening mouse. Wait for a sec...")
+                                        self.tutorial.add_text("Say 'Next' to proceed.")
+                                        thread_mouse = Thread(target=self.mouse.run_mouse)
+                                        thread_mouse.start()
+                                    elif command2 == "browser":
+                                        thread_browser = Thread(target=self.browser.open_browser)
+                                        thread_browser.start()
+                            elif command == "close":
+                                if len(text) > 1:
+                                    command2 = text[1]
+                                    for x in self.symbols:
+                                        command2 = command2.replace(x, '')
+                                    if command2 == "mouse":
+                                        self.mouse.mouse_is_active = False
+                            elif command == "click":
+                                if len(text) > 1:
+                                    command2 = text[1]
+
+                                    for x in self.symbols:
+                                        command2 = command2.replace(x, '')
+
+                                    command2 = self.capitalize_word(command2)
+
+                                    self.HighlightTk(command2)
+                                else:
+                                    pyautogui.click()
+                            elif command == "double":
+                                if len(text) > 1:
+                                    command2 = text[1]
+
+                                    for x in self.symbols:
+                                        command2 = command2.replace(x, '')
+
+                                    if command2 == "click":
+                                        pyautogui.doubleClick()
+                                        if len(text) > 2:
+                                            command3 = text[2]
+                                            self.HighlightTk(command2)
+                                        else:
+                                            pass
+                                    else:
+                                        pass
+                                pass
                             else:
-                                pyautogui.click()
+                                pass
                         else:
                             pass
-                    else:
-                        pass
 
-                    os.remove('speech.wav')
+                        os.remove('speech.wav')
 
-                except sr.WaitTimeoutError:
-                    print("Listening timed out. No audio detected.")
-                except sr.UnknownValueError:
-                    print("Could not understand audio.")
-                except sr.RequestError as e:
-                    print(f"Error with the API request; {e}")
+                    except sr.WaitTimeoutError:
+                        print("Listening timed out. No audio detected.")
+                    except sr.UnknownValueError:
+                        print("Could not understand audio.")
+                    except sr.RequestError as e:
+                        print(f"Error with the API request; {e}")
 
 class Tutorial:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -580,8 +651,31 @@ class Tutorial:
         self.label.pack_forget()
         self.root.geometry('800x400+1100+200')
 
+        self.label.configure(text="Try to open the folder, photo, video, and the app \n with the 'Double click' command. \n\n Once you are done say 'Next' to proceed")
+
         self.file_manager()
-        
+
+    def part_11(self):
+        self.label.pack_forget()
+        self.listen_window.destroy()
+        self.center_window(self.root, 800, 400)
+
+        self.label.configure(text="Now that we've covered all the basics, \n let us now use some applications")
+
+        time.sleep(2)
+
+        self.label.configure(text="You can say 'Open' command following the application \n that you want to open")
+
+        time.sleep(3)
+
+        self.label.pack_forget()
+
+        thread_dt = Thread(target=self.delayed_text, args=(2, "Let us browser the internet!"))
+        thread_dt.start()
+
+        thread_dt = Thread(target=self.delayed_text, args=(2, "Say 'Open browser' to open the browser"))
+        thread_dt.start()
+
 class CameraMouse():
     mouse_is_active = False
     def __init__(self):
@@ -656,6 +750,41 @@ class CameraMouse():
             
         cap.release()
         cv2.destroyAllWindows()
+
+class BrowserStuff:
+    browser_is_active = False
+    def __init__(self):
+
+        self.user_data_dir = 'C:/Users/admin/AppData/Local/Google/Chrome/User Data/'
+
+        self.options = Options()
+        self.options.add_experimental_option('detach', True)    # this makes the browser not close when the script is done 'scripting'
+        self.options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        self.options.add_argument(f'--user-data-dir={self.user_data_dir}')
+        self.options.add_argument(r'--profile-directory=Profile 4')
+
+    def open_browser(self):
+        self.browser_is_active = True
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.options)
+        self.driver.get('https://www.google.com/')
+        # self.driver.maximize_window()
+
+    def close_browser(self):
+        self.driver.quit()
+        
+    def search(self, query: str):
+        search_box = self.driver.find_element('name', 'q')    # for actual chrome search text bar, not the address bar.
+        search_box.clear()
+        search_box.send_keys(query)
+        search_box.submit()
+
+    def scroll(self, direction: str, amount: int):
+        if direction == 'up':
+            self.driver.execute_script(f"window.scrollTo(0, -{amount});")
+        elif direction == 'down':
+            self.driver.execute_script(f"window.scrollTo(0, {amount});")
+        else:
+            pass
 
 if __name__ == "__main__":
     root = tk.Tk()
