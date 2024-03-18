@@ -765,9 +765,12 @@ class BrowserStuff:
 
     def open_browser(self):
         self.browser_is_active = True
+
+        # self.tutorial.root.geometry(f'800x400+{self.tutorial.screen_width - 800}+300')
+
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.options)
         self.driver.get('https://www.google.com/')
-        # self.driver.maximize_window()
+        self.driver.maximize_window()
 
     def close_browser(self):
         self.driver.quit()

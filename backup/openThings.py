@@ -10,13 +10,13 @@ class OpenClose:
     def open(self, things):
         
         if things == "Mouse":
-            import cameraMouse
+            import camera_mouse
 
             print(f"Opening {things}...")
 
             self.activate_mouse = True
 
-            thread1 = threading.Thread(target=cameraMouse.CameraMouse)
+            thread1 = threading.Thread(target=camera_mouse.CameraMouse)
             thread1.start()
 
         elif things == "Browser":

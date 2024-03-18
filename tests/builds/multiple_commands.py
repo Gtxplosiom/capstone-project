@@ -1,4 +1,7 @@
-def multi_command(string: str):
+def execute(command):
+    print(command)
+
+def process_commands(string: str):
     keywords = ['Open', 'Close', 'Search']
 
     commands = []
@@ -10,8 +13,6 @@ def multi_command(string: str):
             word_index = words.index(word)
             command_index = keywords.index(word)
 
-            # print(f'This word is in keywords list: {word}, its index is {word_index}. The word in keywords is located in index: {command_index}')
-
             if word == 'Search':
                 query = words[word_index + 1:]
 
@@ -19,7 +20,7 @@ def multi_command(string: str):
                     if x in keywords:
                         exclude_index = query.index(x)
 
-                query = query[:exclude_index] # omit the keyword found and the rest of the text that follows it
+                query = query[:exclude_index]      # omit the keyword found and the rest of the text that follows it
 
                 query = ' '.join(query)
 
@@ -33,8 +34,9 @@ def multi_command(string: str):
 
             commands.append(command)
 
-    print(commands)
+    for command in commands:
+        execute(command)
 
 sample_string = 'I am Gtxplosion and I want to Open browser and Search one piece is the best of all time ever Open link'
 
-multi_command(sample_string)
+process_commands(sample_string)

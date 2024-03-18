@@ -1,6 +1,6 @@
 from tiktoken.load import data_gym_to_mergeable_bpe_ranks, load_tiktoken_bpe
 import os
-from sampleapp import WhisperASR          ##add to line 14 and 15 respectively if this is used: WhisperASR.curr_dir
+from sample_app import WhisperASR          ##add to line 14 and 15 respectively if this is used: WhisperASR.curr_dir
 # from tutorial import TutorialSR
 
 ENDOFTEXT = "<|endoftext|>"

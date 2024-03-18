@@ -1,21 +1,3 @@
-# import pyautogui
-# import cv2
-# import numpy as np
-
-# screenshot = pyautogui.screenshot()
-
-# img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
-# # img = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY)
-
-# while True:
-#     cv2.imshow("Image", img)
-
-#     key = cv2.waitKey(1)
-#     if key == 27:
-#         break
-
-# cv2.destroyAllWindows()
-
 import cv2
 import numpy as np
 

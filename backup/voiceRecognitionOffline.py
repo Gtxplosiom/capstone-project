@@ -5,9 +5,9 @@ import pyaudio
 import threading
 import time
 
-import clickOnScreen
-import cameraMouse
-import focusApp
+import click_on_screen
+import camera_mouse
+import backup.focus_app as focus_app
 
 from AppOpener import open
 
@@ -44,8 +44,8 @@ def VoiceRecog():
 
     while True:
         data = stream.read(4096, exception_on_overflow=False)
-        notepad_window = focusApp.gw.getWindowsWithTitle('Notepad') # test
-        active_window = str(focusApp.gw.getActiveWindow())
+        notepad_window = focus_app.gw.getWindowsWithTitle('Notepad') # test
+        active_window = str(focus_app.gw.getActiveWindow())
 
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
@@ -64,7 +64,7 @@ def VoiceRecog():
             if "open mouse" in result:
                 global activate_mouse
                 activate_mouse = True
-                thread1 = threading.Thread(target=cameraMouse.CameraMouse)
+                thread1 = threading.Thread(target=camera_mouse.CameraMouse)
                 thread1.start()
             elif "close mouse" in result:
                 activate_mouse = False
@@ -74,16 +74,16 @@ def VoiceRecog():
                 if len(split_result) > 1:
                     command = split_result[1].capitalize()
                     print(command)
-                    clickOnScreen.Click(command)
+                    click_on_screen.Click(command)
                 else:
-                    clickOnScreen.pyautogui.click()
+                    click_on_screen.pyautogui.click()
             elif keyword == "Double" and split_result[1].capitalize() == "Click":
                 if len(split_result) > 1:
                     command = split_result[1].capitalize()
                     print(command)
-                    clickOnScreen.DoubleClick(command)
+                    click_on_screen.DoubleClick(command)
                 else:
-                    clickOnScreen.pyautogui.doubleClick()
+                    click_on_screen.pyautogui.doubleClick()
             elif keyword == "Open":
                 if len(split_result) > 1:
                     command = split_result[1].capitalize()
@@ -95,7 +95,7 @@ def VoiceRecog():
                 if len(split_result) > 1:
                     command = split_result[1].capitalize()
                     print(command)
-                    clickOnScreen.HighlightTk(command)
+                    click_on_screen.HighlightTk(command)
                 else:
                     print("What to find?")
             elif keyword == "Cancel":
@@ -103,17 +103,17 @@ def VoiceRecog():
             elif keyword == "Hover":
                 command = split_result[1].capitalize()
                 print(command)
-                clickOnScreen.hover(command)
+                click_on_screen.hover(command)
             elif keyword == "Type":
                 VoiceType()
 
             # Active window
             elif 'Notepad' in active_window: # test (can be moved to another file)
-                focusApp.Notepad()
+                focus_app.Notepad()
             elif 'Word' in active_window: # test (can be moved to another file)
-                focusApp.Word()
+                focus_app.Word()
             elif 'Chrome' in active_window: # test (can be moved to another file)
-                focusApp.Chrome()
+                focus_app.Chrome()
 
             else:
                 print("Waiting for a command")
@@ -134,7 +134,7 @@ def VoiceRecog():
                                 toggle = False
                                 break
                         elif keyword == "Clear":
-                            clickOnScreen.pyautogui.press('backspace')
+                            click_on_screen.pyautogui.press('backspace')
                         else:
                             if len(keyword) == 0:
                                 print("Say something")
@@ -145,7 +145,7 @@ def VoiceRecog():
                                 result = result.replace("space", " ")
                                 print(split_text)
                                 print(result)
-                                clickOnScreen.pyautogui.typewrite(result)
+                                click_on_screen.pyautogui.typewrite(result)
                                 transcribed_text.clear()
             def OpenApp(App):
                 if App == "Browser":

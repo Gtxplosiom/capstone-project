@@ -1,1 +1,4 @@
-finish file manager simulation
+finish browser simulation
+auto center the mouse - steady mouse
+customize command
+wake word

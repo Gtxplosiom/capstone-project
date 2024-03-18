@@ -5,7 +5,7 @@ import pyaudio
 import keyboard
 import time
 
-import clickOnScreen
+import click_on_screen
 
 model = Model(r"C:\Users\admin\Desktop\TRYZLER\Capstone-Application\models\vosk-model-small-en-us-0.15")
 recognizer = KaldiRecognizer(model, 16000)
@@ -30,7 +30,7 @@ while True:
                     toggle = False
                     break
             elif keyword == "Clear":
-                clickOnScreen.pyautogui.press('backspace')
+                click_on_screen.pyautogui.press('backspace')
             elif len(keyword) == 0:
                     print("Say something")
             else:

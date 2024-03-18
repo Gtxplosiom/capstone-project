@@ -1,6 +1,6 @@
 import whisper
 import threading
-import clickOnScreen
+import click_on_screen
 
 import openThings
 
@@ -67,16 +67,16 @@ def Whisper_Recognition():
                             if len(split_result) > 1:
                                 command = split_result[1].capitalize()
                                 print(command)
-                                clickOnScreen.Click(command)
+                                click_on_screen.Click(command)
                             else:
-                                clickOnScreen.pyautogui.click()
+                                click_on_screen.pyautogui.click()
                         if keyword == "Open":
                             if len(split_result) > 1:
                                 command = split_result[1].capitalize()
                                 print(command)
                                 openThings.open(command)
                             else:
-                                clickOnScreen.DoubleClick()
+                                click_on_screen.DoubleClick()
                         elif keyword == "Close":
                             if len(split_result) > 1:
                                 command = split_result[1].capitalize()

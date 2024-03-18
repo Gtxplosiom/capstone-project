@@ -110,12 +110,12 @@ class WindowASR:
                 self.root.configure(bg=self.colors['Cambridge blue'])
             else:
                 self.state_label.configure(text="Processing audio...")
-                self.root.configure(bg=self.colors['Teal'])
+                self.root.configure(bg=self.colors['Rich black'])
         else:
             if listening:
                 self.root.configure(bg=self.colors['Cambridge blue'])
             else:
-                self.root.configure(bg=self.colors['Teal'])
+                self.root.configure(bg=self.colors['Rich black'])
 
     def show_result(self, result):
         if self.x_position <= self.sidebar_value - 10:

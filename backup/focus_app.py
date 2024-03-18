@@ -1,6 +1,6 @@
 import pyautogui
 import time
-import clickOnScreen
+import click_on_screen
 
 class FocusThings:
     def __init__(self):
@@ -31,7 +31,7 @@ def Chrome(string: str):
             command = string[1].capitalize()
             img_loc = "models/shesh.png"
             print("clicking image...")
-            clickOnScreen.Click_Image(img_loc, command)
+            click_on_screen.Click_Image(img_loc, command)
         else:
             pass
     elif command == "Log":
@@ -40,7 +40,7 @@ def Chrome(string: str):
                 command2 = string[2].capitalize()
                 img_loc = "models/shesh.png"
                 print("clicking image...")
-                clickOnScreen.Click_Image(img_loc, command2)
+                click_on_screen.Click_Image(img_loc, command2)
         else:
             pass
     elif command == "Search":

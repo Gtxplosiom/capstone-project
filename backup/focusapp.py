@@ -6,7 +6,7 @@ import pyaudio
 import threading
 
 import pyautogui
-import cameraMouse
+import camera_mouse
 
 from win11toast import toast
 
