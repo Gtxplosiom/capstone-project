@@ -19,6 +19,7 @@ import pytesseract
 
 from package import CameraMouse
 from package import SeleniumBrowser
+from package import TesseractOCR
 
 class TutorialSR:
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +38,9 @@ class TutorialSR:
 
         self.in_tutorial = True
 
+        self.cm = CameraMouse()
         self.browser = SeleniumBrowser()
+        self.ocr = TesseractOCR()
 
         self.symbols = ['!', ',', '.', '?']
 
@@ -90,63 +93,6 @@ class TutorialSR:
                 self.tutorial.listen_label.config(text="Listening...")
             else:
                 self.tutorial.listen_label.config(text="Processing audio")
-    
-    @staticmethod
-    def HighlightTk(text: str, lang='eng'):
-        screenshot = pyautogui.screenshot()
-
-        img = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
-        img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-
-        psm_num = 6 # adjust page segmentation mode for better extraction of text depending on your image
-        custom_config = f'--oem 3 --psm {psm_num}'
-        data = pytesseract.image_to_data(img, config=custom_config, lang=lang, output_type='data.frame')
-
-        min_conf = 85
-
-        try:
-            data = data[(data['text'] == text) & (data['conf'] >= min_conf)]
-            x, y = data[data['text'] == text]['left'].iloc[0], data[data['text'] == text]['top'].iloc[0]
-            # Filter rows in DataFrame where text is equal to text
-            item_instances = data[data['text'] == text]
-
-            num_items = len(item_instances)
-
-            print(item_instances)
-            print(num_items)
-
-            if num_items > 1:
-                root = tk.Toplevel()
-                root.attributes('-alpha', 0.5)
-                root.attributes('-fullscreen', True)
-
-                canvas = tk.Canvas(root, bg='black')
-                canvas.pack(fill='both', expand=True)
-
-                print(num_items)
-
-                # Loop through each instance of the input text and draw a rectangle with a label
-                for idx, (index, row) in enumerate(item_instances.iterrows(), 1):
-                    x1, y1 = row['left'], row['top']
-                    width, height = row['width'], row['height']
-                    x2, y2 = x1 + width, y1 + height
-
-                    canvas.create_rectangle(x1, y1, x2, y2, fill='blue')
-
-                    # Label the found item with a number above the rectangle
-                    label_x = (x1 + x2) / 2
-                    label_y = y1 - 10
-                    canvas.create_text(label_x, label_y, text=str(idx), fill='white')
-                
-                root.after(5000, root.destroy)
-            else:
-                pyautogui.click(x, y)
-
-        except IndexError:
-            print("Text was not found")
-            return None
-        
-        return(x, y)
 
     def sr_tutorial(self):
         while self.in_tutorial:
@@ -215,7 +161,6 @@ class TutorialSR:
                                     if command2 == "mouse":
                                         self.tutorial.add_text("Opening mouse. Wait for a sec...")
                                         self.tutorial.add_text("Say 'Next' to proceed.")
-                                        self.cm = CameraMouse()
                                         thread_mouse = Thread(target=self.cm.run_mouse)
                                         thread_mouse.start()
                                     elif command2 == "browser":
@@ -237,7 +182,7 @@ class TutorialSR:
 
                                     command2 = self.capitalize_all_letters(command2)
 
-                                    self.HighlightTk(command2)
+                                    self.ocr.one_to_many(command2)
                                 else:
                                     pyautogui.click()
                             elif command == "double":
