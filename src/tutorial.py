@@ -1,29 +1,32 @@
-import tkinter as tk
-from threading import Thread
-import os
-import time
-import whisper
-import speech_recognition as sr
-import keyboard
-from PIL import Image
-
-import cv2
-import dlib
-import pyautogui
-import numpy as np
-import pytesseract
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
+from threading import Thread
+from PIL import Image
+
+import speech_recognition as sr
+import tkinter as tk
+import numpy as np
+
+import os
+import time
+import whisper
+import keyboard
+import cv2
+import dlib
+import pyautogui
+import pytesseract
+
 class TutorialSR:
+    model_path = '/models/sr_stuff/whisper_stuff/assets/models'
     script_dir = os.path.dirname(os.path.abspath(__file__))
     curr_dir = script_dir.replace('\\', '/')
-    tiny_model_path = os.path.expanduser(f'{curr_dir}/models/tiny.en.pt')
+    tiny_model_path = os.path.expanduser(f'{curr_dir}{model_path}/english_only/tiny.en.pt')
 
     is_listening = True
+
     def __init__(self, tutorial):
         self.tutorial = tutorial
         self.r = sr.Recognizer()
