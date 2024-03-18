@@ -1,23 +1,23 @@
+from threading import Thread
+import os
+import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-
-from threading import Thread
 from PIL import Image
 
-import speech_recognition as sr
-import tkinter as tk
 import numpy as np
-
-import os
-import time
+import tkinter as tk
+import speech_recognition as sr
 import whisper
 import keyboard
 import cv2
-import dlib
 import pyautogui
 import pytesseract
+
+from package import camera_mouse
 
 class TutorialSR:
     model_path = '/models/sr_stuff/whisper_stuff/assets/models'
@@ -36,7 +36,6 @@ class TutorialSR:
 
         self.in_tutorial = True
 
-        self.mouse = CameraMouse()
         self.browser = BrowserStuff()
 
         self.symbols = ['!', ',', '.', '?']
@@ -246,7 +245,8 @@ class TutorialSR:
                                     if command2 == "mouse":
                                         self.tutorial.add_text("Opening mouse. Wait for a sec...")
                                         self.tutorial.add_text("Say 'Next' to proceed.")
-                                        thread_mouse = Thread(target=self.mouse.run_mouse)
+                                        self.cm = camera_mouse.CameraMouse()
+                                        thread_mouse = Thread(target=self.cm.run_mouse)
                                         thread_mouse.start()
                                     elif command2 == "browser":
                                         thread_browser = Thread(target=self.browser.open_browser)
@@ -257,7 +257,7 @@ class TutorialSR:
                                     for x in self.symbols:
                                         command2 = command2.replace(x, '')
                                     if command2 == "mouse":
-                                        self.mouse.mouse_is_active = False
+                                        self.cm.mouse_is_active = False
                             elif command == "click":
                                 if len(text) > 1:
                                     command2 = text[1]
@@ -349,12 +349,12 @@ class Tutorial:
         self.button2 = tk.Button(self.root)
 
         # file manager attributes
-        self.fm_icon = tk.PhotoImage(file='media/icons/fmicon.png')
-        self.close_icon = tk.PhotoImage(file='media/icons/close.png')
-        self.folder_icon = tk.PhotoImage(file='media/icons/folder.png')
-        self.image_icon = tk.PhotoImage(file='media/icons/image.png')
-        self.mp4_icon = tk.PhotoImage(file='media/icons/mp4.png')
-        self.windows_app_icon = tk.PhotoImage(file='media/icons/windows_app.png')
+        self.fm_icon = tk.PhotoImage(file='assets/media/icons/fmicon.png')
+        self.close_icon = tk.PhotoImage(file='assets/media/icons/close.png')
+        self.folder_icon = tk.PhotoImage(file='assets/media/icons/folder.png')
+        self.image_icon = tk.PhotoImage(file='assets/media/icons/image.png')
+        self.mp4_icon = tk.PhotoImage(file='assets/media/icons/mp4.png')
+        self.windows_app_icon = tk.PhotoImage(file='assets/media/icons/windows_app.png')
 
         self.click_count = 0
 
@@ -678,81 +678,6 @@ class Tutorial:
 
         thread_dt = Thread(target=self.delayed_text, args=(2, "Say 'Open browser' to open the browser"))
         thread_dt.start()
-
-class CameraMouse():
-    mouse_is_active = False
-    def __init__(self):
-
-        self.detector = dlib.get_frontal_face_detector()
-        self.predictor = dlib.shape_predictor("models/shape_predictor_68_face_landmarks.dat")
-
-        self.sensitivity_x = 12
-        self.sensitivity_y = 12
-
-        self.adjustment_x = 205 # increase if cursor is far right from the center
-        self.adjustment_y = 185 # increase if cursor is far up from the center
-
-        pyautogui.PAUSE=0
-        pyautogui.FAILSAFE = False
-
-    def run_mouse(self):
-        self.mouse_is_active = True
-
-        cap = cv2.VideoCapture(0)  # 0 is index for webcams
-
-        while self.mouse_is_active:
-            ret, frame = cap.read()
-
-            if not ret:
-                print("Fucking shit what is wrong with this shit")
-                break
-
-            flipped_frame = cv2.flip(frame, 1)
-
-            gray = cv2.cvtColor(flipped_frame, cv2.COLOR_BGR2GRAY)
-
-            faces = self.detector(gray)
-
-            for face in faces:
-
-                landmarks = self.predictor(gray, face)
-
-                x1 = face.left()
-                y1 = face.top()
-                x2 = face.right()
-                y2 = face.bottom()
-
-                xx = landmarks.part(30).x
-                yy = landmarks.part(30).y
-
-                follow_x = xx - 205
-                follow_y = yy - 185
-
-                current_pos = pyautogui.position()
-
-                previous_x = xx
-                previous_y = yy
-
-                current_x = xx
-                current_y = yy
-
-                check_x = previous_x - current_x
-                check_y = previous_y - current_y
-
-                pyautogui.moveTo(follow_x * self.sensitivity_x - current_x, follow_y * self.sensitivity_y - current_y, duration=0.1)
-
-                cv2.rectangle(flipped_frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
-                cv2.circle(flipped_frame, (xx, yy), 3, (255, 0, 0), -1)
-
-            cv2.imshow('Preview', flipped_frame)
-
-            key = cv2.waitKey(1)
-
-            if not self.mouse_is_active:
-                break
-            
-        cap.release()
-        cv2.destroyAllWindows()
 
 class BrowserStuff:
     browser_is_active = False
